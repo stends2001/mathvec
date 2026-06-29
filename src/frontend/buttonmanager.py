@@ -10,21 +10,21 @@ class ButtonManagerMixin:
         btn1 = tk.Button(
             self.panel_right,
             text    = 'CLEAR',
-            command = lambda: print('input to be cleared'),
+            command = lambda: self.reset(),
         )        
 
         # button2: rename equation
         btn2 = tk.Button(
             self.panel_right,
-            text    = 'rename',
-            command = lambda: print('equation to be renamed'),
+            text    = 'view',
+            command = lambda: self.view(),
         )
 
         # button3: save equation
         btn3 = tk.Button(
             self.panel_right,
             text    = 'save',
-            command = lambda: print('output to be saved'),
+            command = lambda: self.save(),
         )    
 
         for row, btn in enumerate([btn1, btn2, btn3]):
@@ -36,3 +36,12 @@ class ButtonManagerMixin:
                     padx=2,
                     pady=2
                 )
+
+    def reset(self):
+        raise NotImplementedError('this is supposed to be a stub for `reset()`')
+    
+    def view(self):
+        raise NotImplementedError('this is supposed to be a stub for `view()`')
+    
+    def save(self):
+        raise NotImplementedError('this is supposed to be a stub for `save()`')     
