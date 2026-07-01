@@ -1,0 +1,18 @@
+title:            'MATHVEC'
+
+window_height:      800
+window_width:       1000
+window_y_offset:    0
+right_panel_width:  100
+
+textbox_width:      50
+textbox_height:     10        
+
+canvas_width:       500
+canvas_height:      150
+canvas_textsize:    12
+
+figure_height:      1
+figure_width:       3
+figure_dpi:         300      
+figure_textsize:    20
