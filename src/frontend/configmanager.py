@@ -1,27 +1,50 @@
 import tkinter as tk
+import yaml
+from typing import Dict, Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from ..backend import PathManager
 
 class ConfigManagerMixin:
+    """
+    Mixin class to MathVecApp
+    Manages config
 
-    root: tk.Tk
+    Sets attributes from .yaml file, path to which 
+    is extracted from self.pathmanager.config
 
-    def _set_cfg(self):
-        self.title          = 'MATHVEC'
+    See Also
+    --------
+    For more information, see main class MathVecApp
+    """
+    root:           tk.Tk
+    pathmanager:    'PathManager'
 
-        self.window_height  = 400
-        self.window_width   = 1000
-        self.window_y_offset= 300
-        self.right_panel_width = 100
+    def set_config(self):
+        config                  = self._load_config()
 
-    def manage_cfg(self):
-        self._set_cfg()
-        self.root.title(self.title)
-        screen_width    = self.root.winfo_screenwidth()
-        screen_height   = self.root.winfo_screenheight()        
+        self.title              = config['title']
 
-        center_x = int(screen_width / 2 - self.window_width /2)
-        center_y = int(screen_height/2 - self.window_height / 2 - self.window_y_offset)
+        self.window_height      = config['window_height']     
+        self.window_width       = config['window_width']      
+        self.window_y_offset    = config['window_y_offset']   
+        self.right_panel_width  = config['right_panel_width'] 
 
-        # set the position of the window to the center of the screen
-        self.root.geometry(f'{self.window_width}x{self.window_height}+{center_x}+{center_y}')    
+        self.textbox_width      = config['textbox_width']     
+        self.textbox_height     = config['textbox_height']            
 
-        self.root.resizable(False, False)         
+        self.canvas_width       = config['canvas_width']      
+        self.canvas_height      = config['canvas_height']     
+        self.canvas_textsize    = config['canvas_textsize']   
+
+        self.figure_height      = config['figure_height']     
+        self.figure_width       = config['figure_width']      
+        self.figure_dpi         = config['figure_dpi']              
+        self.figure_textsize    = config['figure_textsize']   
+
+    def _load_config(self) -> Dict[str, Any]:
+        """loads config.yaml"""
+        filepath = self.pathmanager.config
+
+        with open(filepath, "r") as f:
+            return yaml.safe_load(f)       

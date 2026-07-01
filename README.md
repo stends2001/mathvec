@@ -1,6 +1,22 @@
 # MATHVEC
 
 This little project is there to make .svgs out of math text.
+You can run it by running `runapp.py` in the project root.
 
+## User Interface
+In the main plane, we have two text fields. The first is **Name** for the name of the expression, by default `equation_1`. The second is the actual **Expression**, which can be any LaTeX math. Comparing to actual LaTeX code, options are fairly limited (only core math and matrices, no equations, etc.) but I aim to extend on that soon. Below that input box, there's the **Canvas**, which shows a preview of the input text (not fully LaTeX but rather matplotlib math style).
 
-Very happy with progress. I now need to improve docstrings, get rid of all ugly output, have a window - size scaler depending on input (I guess) and do something about figure saving with alrady found name.
+On the right plane, there are 5 buttons:
+- `CLEAR`: resets the app. everything is removed from memory, except the path. So, if it has been adjusted with the button `SET dir` before, you will still be in that directory.
+- `VIEW`: creates a **Figure** in a separate window, that shows proper LaTeX output.
+- `SAVE .svg`: saves a figure equivalent to the one seen when pressing `VIEW` in the directory output_path under the name **Name** in `svg` format.
+- `SAVE .png`: saves a figure equivalent to the one seen when pressing `VIEW` in the directory output_path under the name **Name** in `png` format.
+- `SET dir`: adjusts output_dir.
+
+## Source code
+
+### Backend
+My backend only contains a global pathmanager. It is solely used to extracts paths from.
+
+### Frontend
+The main class that brings everything together, is found in `src/frontend/main.py`. This class has some mixin classes, which are found in the other `.py` files. 

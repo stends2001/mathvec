@@ -1,4 +1,4 @@
-from src import App
+from src import MathVecApp
 
-b = App()
+b = MathVecApp()
 b.run_app()
