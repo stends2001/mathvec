@@ -10,6 +10,7 @@ class PathManager:
     def __init__(self):
         self.project = Path(__file__).parents[2]
         self.src     = self.project / 'src'
+        self.config  = self.project / 'config' / 'config.yaml'
         self.assets  = self.project / 'assets'
         self.output  = self.project / 'output'        
 
