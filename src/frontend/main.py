@@ -11,8 +11,9 @@ from .buttonmanager import ButtonManagerMixin
 from .windowmanager import WindowManagerMixin
 from .figuremanager import FigureManager
 from .savemanager import SaveManagerMixin
+from .popupmanager import PopUpManagerMixin
 
-from ..backend import PathManager
+from ..backend import PathManager, is_latex_found, require_latex_package
 
 class MathVecApp(
     ConfigManagerMixin,
@@ -20,6 +21,7 @@ class MathVecApp(
     ButtonManagerMixin,
     FigureManager,
     SaveManagerMixin,
+    PopUpManagerMixin
     ):
     
     """
@@ -49,8 +51,12 @@ class MathVecApp(
     _figure: Optional[Figure]
 
     def __init__(self):
-        self._toggle_usetex('on')
-        mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
+        self.latex_supported = is_latex_found()
+
+        if self.latex_supported:
+            require_latex_package('amsmath')
+            self._toggle_usetex('on')
+            mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
 
         self.root       = tk.Tk()
         self.pathmanager= PathManager()
@@ -68,6 +74,9 @@ class MathVecApp(
         """main function to run the app"""
         self.root.mainloop()
 
+    def quit_app(self):
+        self.root.destroy()          # or self.root.destroy()
+
     def reset(self):
         """reset everything, with the exceptino of the output directory"""
         self._figure = None 
@@ -76,18 +85,28 @@ class MathVecApp(
 
         self.entry.bind("<KeyRelease>", lambda e: self._update_canvas())        
 
-    def view(self):
+    def view(self) -> None:
         """preview expression in separate window"""
+        if not self.latex_supported:
+            self.button_unavailable('VIEW')
+            return None
+
         self.figure
         plt.show()        
 
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""
-        self._savefig(extension)
+        if not self.latex_supported:
+            self.button_unavailable('SAVE')
+            return None
+                
+        path = self._savefig(extension)
+        self.figure_saved(str(path))      
 
     def set_output_dir(self):
         """interactively adjust output_dir"""
         self.output_dir = Path(filedialog.askdirectory())
+        self.path_adjusted(str(self.output_dir))              
 
     @property 
     def expression_input(self) -> str:
