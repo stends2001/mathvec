@@ -3,6 +3,10 @@
 This little project is there to make .svgs out of math text.
 You can run it by running `runapp.py` in the project root.
 
+## Requirements
+Python 3.10+, tkinter (usually a standard library), and a LaTeX distribution (e.g. TeX Live or MiKTeX) available on your PATH. Also note, specifically the following LaTeX packages are used:
+- asmath
+
 ## User Interface
 In the main plane, we have two text fields. The first is **Name** for the name of the expression, by default `equation_1`. The second is the actual **Expression**, which can be any LaTeX math. Comparing to actual LaTeX code, options are fairly limited (only core math and matrices, no equations, etc.) but I aim to extend on that soon. Below that input box, there's the **Canvas**, which shows a preview of the input text (not fully LaTeX but rather matplotlib math style).
 
