@@ -36,8 +36,8 @@ class SaveManagerMixin:
         """stub. actually defined on main class"""        
         raise NotImplementedError
     
-    def _savefig(self, extension: Literal['svg','png']):
-        """saves figure under resolved filename with inputted extension."""
+    def _savefig(self, extension: Literal['svg','png']) -> Path:
+        """saves figure under resolved filename with inputted extension. Returns path"""
         filename = f"{self.expression_name}.{extension}"
         path     = self.output_dir / filename
         path     = self._resolve_filename(path)
@@ -53,6 +53,8 @@ class SaveManagerMixin:
 
             case _:
                 assert_never(self.extension)      
+
+        return path
 
     def _resolve_filename(self, path: Path) -> Path:
         """
