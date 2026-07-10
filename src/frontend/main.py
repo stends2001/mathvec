@@ -70,6 +70,13 @@ class MathVecApp(
         self.manage_buttons()     
         self.reset()
 
+        def _on_change():
+            self._figure = None   # invalidate cached VIEW/SAVE figure
+            self._update_canvas()
+
+        self.entry.bind("<KeyRelease>", lambda e: _on_change())
+        self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
+
     def run_app(self):
         """main function to run the app"""
         self.root.mainloop()
@@ -78,12 +85,17 @@ class MathVecApp(
         self.root.destroy()          # or self.root.destroy()
 
     def reset(self):
-        """reset everything, with the exceptino of the output directory"""
-        self._figure = None 
-        self._canvas = None 
-        self._update_canvas()   
+        """reset everything, with the exception of the output directory"""
+        self._figure = None
+        self._canvas = None
 
-        self.entry.bind("<KeyRelease>", lambda e: self._update_canvas())        
+        self.entry.delete("1.0", "end")
+        self.entry.insert("1.0", self.default_input)
+
+        self.naming.delete(0, "end")
+        self.naming.insert(0, self.default_name)
+
+        self._update_canvas()           
 
     def view(self) -> None:
         """preview expression in separate window"""
@@ -101,7 +113,7 @@ class MathVecApp(
             return None
                 
         path = self._savefig(extension)
-        self.figure_saved(str(path))      
+        self.figure_saved(str(path))    
 
     def set_output_dir(self):
         """interactively adjust output_dir"""

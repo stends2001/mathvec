@@ -1,7 +1,7 @@
 import tkinter as tk
 from typing import Optional, Literal, assert_never
 from io import BytesIO
-
+from matplotlib.mathtext import MathTextParser
 from PIL import Image, ImageTk
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg
@@ -107,15 +107,23 @@ class FigureManager:
         fig     = Figure(figsize=(self.figure_width, self.figure_height), dpi=self.figure_dpi)
         ax: Axes= fig.add_axes([0, 0, 1, 1]) # type: ignore
         ax.axis("off")
-        
-        if len(input_text)>0:
-            ax.text(
-                0.05,
-                0.5,
-                rf'${input_text}$',
-                fontsize=self.canvas_textsize,
-                va="center",
-            )
+
+        parser = MathTextParser("agg")
+
+        try:
+            parser.parse(f"${input_text}$")
+            text = f"${input_text}$"
+        except ValueError:
+            text = input_text
+
+        ax.text(
+            0.05,
+            0.5,
+            text,
+            fontsize=self.canvas_textsize,
+            va="center",
+        )
+
 
         buf = BytesIO()
         FigureCanvasAgg(fig).print_png(buf)
@@ -127,8 +135,6 @@ class FigureManager:
 
     def _update_canvas(self) -> None:
         """update canvas plane with a canvas"""
-        if len(self.expression_input) < 1:
-            return
         
         self._toggle_usetex('off')
         self._canvas_image = self._draw_canvas()
