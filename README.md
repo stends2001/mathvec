@@ -4,10 +4,10 @@ This little project is there to make .svgs out of math text.
 You can run it by running `runapp.py` in the project root.
 
 ## TODO
+- dynamic picture size
 - tests
 - stubs -> protocols
 - packaging .toml
-- exception handling in LaTeX
 - N most recent expression - history panel
 - dark mode
 - tkinter alternative
