@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter
 import yaml
 from typing import Dict, Any, TYPE_CHECKING
 
@@ -17,7 +18,7 @@ class ConfigManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    root:           tk.Tk
+    root:           customtkinter.CTk
     pathmanager:    'PathManager'
 
     def set_config(self):
@@ -42,9 +43,32 @@ class ConfigManagerMixin:
         self.figure_dpi         = config['figure_dpi']              
         self.figure_textsize    = config['figure_textsize']   
 
+        self.theme              = config['theme']
+
+        theme_vars              = self._load_theme_colors()
+        theme                   = theme_vars[self.theme]
+
+        self.theme_main         = theme['main']
+        self.theme_frame        = theme['frame']
+        self.theme_frame_edge   = theme['frame_edge']
+        self.theme_text         = theme['text']
+        self.theme_input        = theme['input']
+        self.theme_input_edge   = theme['input_edge']
+        self.theme_button       = theme['button']
+        self.theme_button_hover = theme['button_hover']
+        self.theme_canvas       = theme['canvas_bg']
+        self.theme_button_unavail=theme['button_unavail']
+
+
     def _load_config(self) -> Dict[str, Any]:
         """loads config.yaml"""
         filepath = self.pathmanager.config
 
         with open(filepath, "r") as f:
             return yaml.safe_load(f)       
+        
+    def _load_theme_colors(self) -> Dict[str, Any]:
+        filepath = self.pathmanager.assets / 'themes.yaml'
+
+        with open(filepath, "r") as f:
+            return yaml.safe_load(f)            

@@ -6,6 +6,8 @@ import matplotlib as mpl
 from matplotlib.figure import Figure
 from pathlib import Path
 
+import customtkinter # type: ignore
+
 from .configmanager import ConfigManagerMixin
 from .buttonmanager import ButtonManagerMixin
 from .windowmanager import WindowManagerMixin
@@ -57,15 +59,17 @@ class MathVecApp(
             require_latex_package('amsmath')
             self._toggle_usetex('on')
             mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
-
-        self.root       = tk.Tk()
+        
         self.pathmanager= PathManager()
+        self.set_config()     
 
+        self.root       = customtkinter.CTk(fg_color=self.theme_frame)
+        
         self.default_input= ''
         self.default_name = 'equation_1'
         self.output_dir   = self.pathmanager.output
 
-        self.set_config()               
+                  
         self.configure_window()   
         self.manage_buttons()     
         self.reset()

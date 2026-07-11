@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter
 from typing import Literal
 
 class ButtonManagerMixin:
@@ -14,43 +15,61 @@ class ButtonManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    panel_right: tk.Frame
-    root: tk.Tk
+    panel_right: customtkinter.CTkFrame
+    root: customtkinter.CTk
 
     latex_supported:    bool
+
+    theme_button:       str 
+    theme_button_hover: str
+    theme_button_unavail:str
 
     def manage_buttons(self):
 
         # BUTTONS - INDEPENDENT ON LATEX
 
         # button1: clear
-        btn1 = tk.Button(self.panel_right, text = 'CLEAR', 
-                         command = lambda: self.reset())        
+        btn1 = customtkinter.CTkButton(self.panel_right, 
+                                       text="CLEAR", 
+                                       command=self.reset, 
+                                       fg_color = self.theme_button, 
+                                       hover_color= self.theme_button_hover)
 
         # button5: set directory
-        btn5 = tk.Button(self.panel_right, text = 'SET dir', 
-                         command = lambda: self.set_output_dir())         
-                
-        btn6 = tk.Button(self.panel_right, text="EXIT",
-            command=self.quit_app)        
+        btn5 = customtkinter.CTkButton(self.panel_right, 
+                                       text="SET dir", 
+                                       command=self.set_output_dir,
+                                       fg_color = self.theme_button, 
+                                       hover_color= self.theme_button_hover)     
+
+        btn6 = customtkinter.CTkButton(self.panel_right, 
+                                       text="EXIT", 
+                                       command=self.quit_app,
+                                       fg_color = self.theme_button, 
+                                       hover_color= self.theme_button_hover)       
         
+                                    
+
         # button2: view expression
-        btn2 = tk.Button(self.panel_right, 
+        btn2 = customtkinter.CTkButton(self.panel_right, 
                          text='VIEW' if self.latex_supported else '❌VIEW', 
                          command=self.view, 
-                         bg = None if self.latex_supported else '#F7A8A8'   # type: ignore
+                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
+                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
                          )  
         
-        btn3 = tk.Button(self.panel_right, 
+        btn3 = customtkinter.CTkButton(self.panel_right, 
                          text='SAVE .svg' if self.latex_supported else '❌SAVE .svg', 
                          command= lambda ext = 'svg': self.save(ext), 
-                         bg = None if self.latex_supported else '#F7A8A8'   # type: ignore
+                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
+                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
                          )   
 
-        btn4 = tk.Button(self.panel_right, 
+        btn4 = customtkinter.CTkButton(self.panel_right, 
                          text='SAVE .png' if self.latex_supported else '❌SAVE .png', 
                          command= lambda ext = 'png': self.save(ext), 
-                         bg = None if self.latex_supported else '#F7A8A8'   # type: ignore
+                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
+                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
                          )              
 
         for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6]):

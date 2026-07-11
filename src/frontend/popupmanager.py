@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter
 from tkinter import messagebox
 
 class PopUpManagerMixin:
@@ -12,8 +13,8 @@ class PopUpManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    panel_right: tk.Frame
-    root: tk.Tk
+    panel_right: customtkinter.CTkFrame
+    root: customtkinter.CTk
 
     latex_supported:    bool
 

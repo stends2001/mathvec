@@ -46,15 +46,26 @@ class SaveManagerMixin:
 
         match extension:
             case 'svg':
-                fig.savefig(path, format = 'svg',   dpi=self.figure.dpi,  transparent= True,    pad_inches =0)
-                
+                fig.savefig(
+                    path, format='svg', 
+                    dpi=self.figure.dpi,
+                    transparent=True,
+                    bbox_inches='tight', 
+                    pad_inches=0.05,
+                )
+
             case 'png':
-                fig.savefig(path,                   dpi=self.figure.dpi)     
+                fig.savefig(
+                    path, 
+                    dpi=self.figure.dpi,
+                    bbox_inches='tight', 
+                    pad_inches=0.05,
+                )
 
             case _:
-                assert_never(self.extension)      
+                assert_never(extension)
 
-        return path
+        return path    
 
     def _resolve_filename(self, path: Path) -> Path:
         """

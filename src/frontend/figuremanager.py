@@ -1,4 +1,5 @@
 import tkinter as tk
+import customtkinter
 from typing import Optional, Literal, assert_never
 from io import BytesIO
 from matplotlib.mathtext import MathTextParser
@@ -27,7 +28,7 @@ class FigureManager:
     --------
     For more information, see main class MathVecApp
     """
-    canvas_plane:   tk.Canvas
+    canvas_plane:   customtkinter.CTkCanvas
 
     figure_height:  int 
     figure_width:   int 
@@ -40,6 +41,9 @@ class FigureManager:
 
     _figure:        Optional[Figure]
     _canvas:        Optional[ImageTk.PhotoImage]
+    
+    theme_canvas:   str
+    theme_text:     str
     
     @property 
     def expression_input(self) -> str:
@@ -104,9 +108,13 @@ class FigureManager:
         """
         input_text = self.expression_input
         
-        fig     = Figure(figsize=(self.figure_width, self.figure_height), dpi=self.figure_dpi)
+        fig     = Figure(figsize=(self.figure_width, self.figure_height), 
+                         dpi=self.figure_dpi,
+                        facecolor=self.theme_canvas)
+        
         ax: Axes= fig.add_axes([0, 0, 1, 1]) # type: ignore
         ax.axis("off")
+        ax.set_facecolor(self.theme_canvas)
 
         parser = MathTextParser("agg")
 
@@ -122,6 +130,7 @@ class FigureManager:
             text,
             fontsize=self.canvas_textsize,
             va="center",
+            color=self.theme_text
         )
 
 
