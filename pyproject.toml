@@ -1,0 +1,13 @@
+[project]
+name = "mathvec"
+version = "0.1.0"
+description = "Turn LaTeX math into SVG/PNG images"
+dependencies = [
+    "matplotlib==3.10.3",
+    "Pillow==11.3.0",
+    "PyYAML==6.0.3",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
