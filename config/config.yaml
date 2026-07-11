@@ -16,3 +16,5 @@ figure_height:      1
 figure_width:       3
 figure_dpi:         300      
 figure_textsize:    20
+
+theme:              dark_mode
