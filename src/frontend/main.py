@@ -1,5 +1,5 @@
 import tkinter as tk
-from typing import Optional, Literal
+from typing import Optional, Literal, Dict
 from tkinter import filedialog
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -10,6 +10,7 @@ import customtkinter
 
 from .configmanager import ConfigManagerMixin
 from .buttonmanager import ButtonManagerMixin
+from .historymanager import HistoryManagerMixin
 from .windowmanager import WindowManagerMixin
 from .figuremanager import FigureManager
 from .savemanager import SaveManagerMixin
@@ -22,6 +23,7 @@ class MathVecApp(
     ConfigManagerMixin,
     WindowManagerMixin,
     ButtonManagerMixin,
+    HistoryManagerMixin,
     FigureManager,
     SaveManagerMixin,
     PopUpManagerMixin
@@ -52,9 +54,11 @@ class MathVecApp(
     - SaveManagerMixin
     """
     _figure: Optional[Figure]
-
+    _history: Dict[str,str]
     def __init__(self):
+        self._history = {}
         self.latex_supported    = False
+
         latex_on_path           = is_latex_found()
 
         if latex_on_path:
@@ -78,6 +82,7 @@ class MathVecApp(
                   
         self.configure_window()   
         self.manage_buttons()     
+        self.manage_history()
         self.reset()
 
         def _on_change():
@@ -116,6 +121,8 @@ class MathVecApp(
         try:
             self.figure
             plt.show()      
+            self._save_to_history(self.expression_name, self.expression_input)
+        
         except EmptyExpressionError as e:
             print(e)
   
@@ -128,6 +135,8 @@ class MathVecApp(
         try:         
             path = self._savefig(extension)
             self.figure_saved(str(path))  
+            self._save_to_history(self.expression_name, self.expression_input)
+        
         except (EmptyExpressionError,  EmtpyExpressionName) as e:
             print(e)
 
