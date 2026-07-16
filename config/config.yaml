@@ -3,7 +3,7 @@ title:            'MATHVEC'
 window_height:      700
 window_width:       1000
 window_y_offset:    20
-right_panel_width:  100
+right_panel_width:  200
 
 textbox_width:      50
 textbox_height:     10        
