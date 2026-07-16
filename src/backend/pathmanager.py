@@ -13,10 +13,10 @@ class PathManager:
         self.config  = self.project / 'config' / 'config.yaml'
         self.assets  = self.project / 'assets'
         self.output  = self.project / 'output'
-        self.history = self.project / 'history' / 'history.yaml'
+        self.history = self.project / 'history' / 'history.tsv'
 
         # output and history are in .gitignore: must be created
-        for path in [self.output, self.history]:
+        for path in [self.output, self.history.parent]:
             if not path.exists():
                 path.mkdir()
 
@@ -25,5 +25,5 @@ class PathManager:
     def _assert_path_integrity(self):
         path: Path 
         for pathname, path in vars(self).items():
-            if not path.exists():
+            if not path.exists() and pathname != 'history':
                 raise PathNotFound(pathname, path)

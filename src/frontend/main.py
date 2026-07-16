@@ -97,6 +97,7 @@ class MathVecApp(
         self.root.mainloop()
 
     def quit_app(self):
+        self._save_history()
         self.root.destroy()          # or self.root.destroy()
 
     def reset(self):
@@ -119,9 +120,11 @@ class MathVecApp(
             return None
         
         try:
+            self._save_to_history(self.expression_name, self.expression_input)
             self.figure
             plt.show()      
-            self._save_to_history(self.expression_name, self.expression_input)
+            print(f'saving {self.expression_name, self.expression_input}')
+            
         
         except EmptyExpressionError as e:
             print(e)

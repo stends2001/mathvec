@@ -1,6 +1,9 @@
 import tkinter as tk
 import customtkinter
 from typing import Literal, Dict
+import pandas as pd
+
+from ..backend import PathManager
 
 class HistoryManagerMixin:
     """
@@ -16,15 +19,14 @@ class HistoryManagerMixin:
     For more information, see main class MathVecApp
     """
     panel_right_bottom: customtkinter.CTkFrame
-    root: customtkinter.CTk
+    root:               customtkinter.CTk
 
     latex_supported:    bool
+    pathmanager:        PathManager
 
     theme_main:         str 
     theme_text:         str
     theme_frame:        str
-
-    _history: Dict[str,str]
 
     def manage_history(self):
         row1 = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.theme_frame)
@@ -37,10 +39,19 @@ class HistoryManagerMixin:
             font=customtkinter.CTkFont(size=20, weight="bold")
         ).pack(pady=10)         
 
-    def _save_to_history(self, name: str, expression: str):
-        self._history[name] = expression
+        self._history = self._load_history()
 
-        print(f'history: {self._history}')
+    def _save_to_history(self, name: str, expression: str):
+        self._history.loc[len(self._history)] =  {"name": name, "expression": expression}
 
     def _save_history(self):
-        pass
+        filepath = self.pathmanager.history
+
+        self._history.reset_index(drop = True).to_csv(filepath, sep = "\t", index = True)
+
+    def _load_history(self) -> pd.DataFrame:
+        filepath = self.pathmanager.history
+        if filepath.exists():
+           return pd.read_csv(filepath, delimiter="\t", index_col=True)
+        else:
+            return pd.DataFrame(columns=["name", "expression"])
