@@ -44,9 +44,15 @@ class ButtonManagerMixin:
                                        fg_color = self.theme_button, 
                                        hover_color= self.theme_button_hover)     
 
-        btn6 = customtkinter.CTkButton(self.panel_right_top, 
+        btn7 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="EXIT", 
                                        command=self.quit_app,
+                                       fg_color = self.theme_button, 
+                                       hover_color= self.theme_button_hover)       
+        
+        btn6 = customtkinter.CTkButton(self.panel_right_top, 
+                                       text="CLEAR HISTORY", 
+                                       command=self.clear_history,
                                        fg_color = self.theme_button, 
                                        hover_color= self.theme_button_hover)       
         
@@ -74,7 +80,7 @@ class ButtonManagerMixin:
                          hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
                          )              
 
-        for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6]):
+        for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7]):
       
             btn.grid(
                     row=row,
@@ -98,3 +104,6 @@ class ButtonManagerMixin:
     
     def quit_app(self):
         raise NotImplementedError('this is supposed to be a stub for `quit_app()`')                   
+    
+    def clear_history(self):
+        raise NotImplementedError('this is supposed to be a stub for `clear_history()`')          

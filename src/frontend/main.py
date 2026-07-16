@@ -128,7 +128,17 @@ class MathVecApp(
         
         except EmptyExpressionError as e:
             print(e)
-  
+
+    def clear_history(self):
+        self._clear_history()
+
+    def insert_from_history(self, name: str, expression_name: str):
+        self.reset()
+        self.entry.delete("1.0", "end")
+        self.entry.insert("1.0", expression_name)
+
+        self.naming.delete(0, "end")
+        self.naming.insert(0, name)
 
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""
