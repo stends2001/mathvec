@@ -2,6 +2,8 @@ from typing import Literal, assert_never
 from matplotlib.figure import Figure
 from pathlib import Path
 
+from ..exceptions import EmtpyExpressionName, EmptyExpressionError
+
 class SaveManagerMixin:
     """
     Mixin class to MathVecApp
@@ -38,6 +40,12 @@ class SaveManagerMixin:
     
     def _savefig(self, extension: Literal['svg','png']) -> Path:
         """saves figure under resolved filename with inputted extension. Returns path"""
+        if self.expression_input == '':
+            raise EmptyExpressionError('SAVE')
+        
+        if self.expression_name == '':
+            raise EmtpyExpressionName()
+
         filename = f"{self.expression_name}.{extension}"
         path     = self.output_dir / filename
         path     = self._resolve_filename(path)

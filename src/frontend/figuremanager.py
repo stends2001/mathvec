@@ -9,6 +9,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 
+from ..exceptions import EmptyExpressionError
+
+
 class FigureManager:
     """
     Mixin class to MathVecApp
@@ -79,6 +82,9 @@ class FigureManager:
         Draw figure: that is, an image of proper latex code. 
         To be viewed or saved. Both returned, and stored in `self._figure`
         """
+        if self.expression_input == '':
+            raise EmptyExpressionError('VIEW')
+
         self._toggle_usetex('on')        
 
         fig, ax = plt.subplots(figsize=(self.figure_width, self.figure_height))

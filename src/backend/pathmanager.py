@@ -12,7 +12,11 @@ class PathManager:
         self.src     = self.project / 'src'
         self.config  = self.project / 'config' / 'config.yaml'
         self.assets  = self.project / 'assets'
-        self.output  = self.project / 'output'        
+        self.output  = self.project / 'output'
+
+        # output is in .gitignore: must be created
+        if not self.output.exists():
+            self.output.mkdir()
 
         self._assert_path_integrity()
 

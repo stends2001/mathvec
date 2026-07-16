@@ -6,7 +6,7 @@ import matplotlib as mpl
 from matplotlib.figure import Figure
 from pathlib import Path
 
-import customtkinter # type: ignore
+import customtkinter
 
 from .configmanager import ConfigManagerMixin
 from .buttonmanager import ButtonManagerMixin
@@ -15,7 +15,8 @@ from .figuremanager import FigureManager
 from .savemanager import SaveManagerMixin
 from .popupmanager import PopUpManagerMixin
 
-from ..backend import PathManager, is_latex_found, require_latex_package
+from ..backend import PathManager, is_latex_found, require_latex_package, LaTeXPackageNotFoundError, LaTeXNotFoundError
+from ..exceptions import EmptyExpressionError, EmtpyExpressionName
 
 class MathVecApp(
     ConfigManagerMixin,
@@ -53,13 +54,19 @@ class MathVecApp(
     _figure: Optional[Figure]
 
     def __init__(self):
-        self.latex_supported = is_latex_found()
+        self.latex_supported    = False
+        latex_on_path           = is_latex_found()
 
-        if self.latex_supported:
-            require_latex_package('amsmath')
-            self._toggle_usetex('on')
-            mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
-        
+        if latex_on_path:
+            try:
+                require_latex_package('amsmath')
+                self._toggle_usetex('on')
+                mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
+                self.latex_supported = True
+
+            except LaTeXPackageNotFoundError:
+                print('No LaTeX found. Some functions may not available')
+
         self.pathmanager= PathManager()
         self.set_config()     
 
@@ -68,7 +75,6 @@ class MathVecApp(
         self.default_input= ''
         self.default_name = 'equation_1'
         self.output_dir   = self.pathmanager.output
-
                   
         self.configure_window()   
         self.manage_buttons()     
@@ -106,22 +112,34 @@ class MathVecApp(
         if not self.latex_supported:
             self.button_unavailable('VIEW')
             return None
-
-        self.figure
-        plt.show()        
+        
+        try:
+            self.figure
+            plt.show()      
+        except EmptyExpressionError as e:
+            print(e)
+  
 
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""
         if not self.latex_supported:
             self.button_unavailable('SAVE')
             return None
-                
-        path = self._savefig(extension)
-        self.figure_saved(str(path))    
+        try:         
+            path = self._savefig(extension)
+            self.figure_saved(str(path))  
+        except (EmptyExpressionError,  EmtpyExpressionName) as e:
+            print(e)
 
     def set_output_dir(self):
         """interactively adjust output_dir"""
-        self.output_dir = Path(filedialog.askdirectory())
+        output_dir = Path(filedialog.askdirectory())
+
+        # if not filled in, will be default
+        if output_dir == "":
+            output_dir = self.pathmanager.output
+        
+        self.output_dir = output_dir
         self.path_adjusted(str(self.output_dir))              
 
     @property 
