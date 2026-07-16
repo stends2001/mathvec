@@ -49,7 +49,7 @@ class WindowManagerMixin:
 
         # set the position of the window to the center of the screen
         self.root.geometry(f'{self.window_width}x{self.window_height}+{center_x}+{center_y}')    
-        self.root.resizable(False, False)         
+        self.root.resizable(True, True)         
         self.root.iconbitmap(self.pathmanager.assets / 'logo.ico') # type: ignore
 
     def configure_window(self):
@@ -64,12 +64,38 @@ class WindowManagerMixin:
                                                  fg_color = self.theme_frame)
         self.panel_left.grid(row = 0, column = 0, sticky = 'nsew')
 
-        self.panel_right = customtkinter.CTkFrame(self.root, width = self.right_panel_width,
+        self.panel_right = customtkinter.CTkFrame(self.root,
                                                   fg_color = self.theme_frame,
                                                   border_color= self.theme_frame_edge)
+        
+        self.panel_right.grid_rowconfigure(0, weight=1)
+        self.panel_right.grid_rowconfigure(1, weight=1)
+        self.panel_right.grid_columnconfigure(0, weight=1)
+
         self.panel_right.grid(row = 0, column = 1, sticky = 'ns')
         self.panel_right.grid_columnconfigure(0, weight=1)        
         self.panel_right.grid_propagate(False)
+
+        # Buttons - panel
+        self.panel_right.grid_rowconfigure(0, weight=1)
+
+        # History - panel
+        self.panel_right.grid_rowconfigure(1, weight=6)
+        self.panel_right.grid_columnconfigure(0, weight=1)
+
+        # Top frame
+        self.panel_right_top = customtkinter.CTkFrame(
+            self.panel_right,
+            fg_color=self.theme_frame
+        )
+        self.panel_right_top.grid(row=0, column=0, sticky="nsew")
+
+        # Bottom frame
+        self.panel_right_bottom = customtkinter.CTkFrame(
+            self.panel_right,
+            fg_color=self.theme_frame
+        )
+        self.panel_right_bottom.grid(row=1, column=0, sticky="nsew")
 
         # Input 1 row
         row1 = customtkinter.CTkFrame(self.panel_left,
