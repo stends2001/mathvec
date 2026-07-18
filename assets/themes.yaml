@@ -1,23 +1,20 @@
 light_mode:
-  main: "#FFFFFF"
-  frame: "#F3F3F3"
-  frame_edge: "#007ACC"
-  text: "#1E1E1E"
-  input: "#FFFFFF"
-  input_edge: "#CE9178"
-  button: "#007ACC"
-  button_hover: "#005A9E"
-  button_unavail: '#F7A8A8'  
-  canvas_bg: 'white'
+  main: "#FFFFFF"           # white1
+  frame: "#F3F3F3"          # white2
+  frame_edge: "#007ACC"     # 
+  text: "#1E1E1E"           #
+  input_edge: "#CE9178"     #
+  button: "#007ACC"         #
+  button_hover: "#005A9E"   #
+  button_unavail: '#F7A8A8' #
+  canvas_bg: 'white'        #
 
 dark_mode:
-  main: "#1E1E1E"
-  frame: "#252526"
-  frame_edge: "#3C3C3C"
-  text: "#D4D4D4"
-  input: "#333333"
-  input_edge: "#CE9178"
-  button: "#15A085"
-  button_hover: "#0F7864"
-  button_unavail: '#F7A8A8'
-  canvas_bg: 'none'
+  frame: "#1E1E1E"          # black1 => main background
+  frame_edge: "#3C3C3C"     # grey1  => edges between frames 
+  text: "#D4D4D4"           # white1 => text
+  input_edge: "#CE9178"     # orange1=> input edge
+  button: "#15A085"         # teal1  => inactive button background
+  button_hover: "#0F7864"   # teal2  => active button background
+  button_unavail: '#F7A8A8' # red1   => unavailable buttons
+  canvas_bg: 'none'         #

@@ -2,6 +2,7 @@ import tkinter as tk
 import customtkinter
 import yaml
 from typing import Dict, Any, TYPE_CHECKING
+from .colorpalette import ColorPalette
 
 if TYPE_CHECKING:
     from ..backend import PathManager
@@ -46,19 +47,7 @@ class ConfigManagerMixin:
         self.theme              = config['theme']
 
         theme_vars              = self._load_theme_colors()
-        theme                   = theme_vars[self.theme]
-
-        self.theme_main         = theme['main']
-        self.theme_frame        = theme['frame']
-        self.theme_frame_edge   = theme['frame_edge']
-        self.theme_text         = theme['text']
-        self.theme_input        = theme['input']
-        self.theme_input_edge   = theme['input_edge']
-        self.theme_button       = theme['button']
-        self.theme_button_hover = theme['button_hover']
-        self.theme_canvas       = theme['canvas_bg']
-        self.theme_button_unavail=theme['button_unavail']
-
+        self.color_palette      = ColorPalette(**theme_vars[self.theme])
 
     def _load_config(self) -> Dict[str, Any]:
         """loads config.yaml"""

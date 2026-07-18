@@ -2,6 +2,8 @@ import tkinter as tk
 import customtkinter
 from typing import Literal
 
+from .colorpalette import ColorPalette
+
 class ButtonManagerMixin:
     """
     Mixin class to MathVecApp
@@ -20,9 +22,7 @@ class ButtonManagerMixin:
 
     latex_supported:    bool
 
-    theme_button:       str 
-    theme_button_hover: str
-    theme_button_unavail:str
+    color_palette: ColorPalette
     right_panel_width:  int
 
     def manage_buttons(self):
@@ -34,27 +34,27 @@ class ButtonManagerMixin:
                                        text="CLEAR", 
                                        width = int(0.975 * self.right_panel_width),
                                        command=self.reset, 
-                                       fg_color = self.theme_button, 
-                                       hover_color= self.theme_button_hover)
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)
 
         # button5: set directory
         btn5 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="SET dir", 
-                                       command=self.set_output_dir,
-                                       fg_color = self.theme_button, 
-                                       hover_color= self.theme_button_hover)     
+                                       command=self.set_output_dir, 
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)
 
         btn7 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="EXIT", 
-                                       command=self.quit_app,
-                                       fg_color = self.theme_button, 
-                                       hover_color= self.theme_button_hover)       
+                                       command=self.quit_app, 
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)      
         
         btn6 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="CLEAR HISTORY", 
-                                       command=self.clear_history,
-                                       fg_color = self.theme_button, 
-                                       hover_color= self.theme_button_hover)       
+                                       command=self.clear_history, 
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)      
         
                                     
 
@@ -62,22 +62,22 @@ class ButtonManagerMixin:
         btn2 = customtkinter.CTkButton(self.panel_right_top, 
                          text='VIEW' if self.latex_supported else '❌VIEW', 
                          command=self.view, 
-                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
-                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
+                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
                          )  
         
         btn3 = customtkinter.CTkButton(self.panel_right_top, 
                          text='SAVE .svg' if self.latex_supported else '❌SAVE .svg', 
                          command= lambda ext = 'svg': self.save(ext), 
-                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
-                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
+                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
                          )   
 
         btn4 = customtkinter.CTkButton(self.panel_right_top, 
                          text='SAVE .png' if self.latex_supported else '❌SAVE .png', 
                          command= lambda ext = 'png': self.save(ext), 
-                         fg_color = self.theme_button if self.latex_supported else self.theme_button_unavail,
-                         hover_color= self.theme_button_hover if self.latex_supported else self.theme_button_unavail
+                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
                          )              
 
         for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7]):

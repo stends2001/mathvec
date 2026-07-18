@@ -6,6 +6,9 @@ dependencies = [
     "matplotlib==3.10.3",
     "Pillow==11.3.0",
     "PyYAML==6.0.3",
+    "customtkinter==6.0.0",
+    "pandas==3.0.3",
+    "PyYAML==6.0.3",  
 ]
 
 [build-system]

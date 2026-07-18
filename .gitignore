@@ -4,3 +4,6 @@ nb.ipynb
 __pycache__/
 *.py[cod]
 *$py.class
+*.egg-info/
+build/
+requirements.txt

@@ -1,9 +1,11 @@
 import tkinter as tk
 import customtkinter
-from typing import TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from ..backend import PathManager
+
+from .colorpalette import ColorPalette
 
 class WindowManagerMixin:
     """
@@ -32,11 +34,7 @@ class WindowManagerMixin:
     canvas_width:       int 
     canvas_height:      int
 
-    theme_frame:        str
-    theme_frame_edge:   str
-    theme_input:        str 
-    theme_input_edge:   str
-    theme_text:         str
+    color_palette:      ColorPalette
 
     def _setup_windows(self):
         """initial window setup"""
@@ -61,12 +59,13 @@ class WindowManagerMixin:
         self.root.grid_columnconfigure(1, weight = 0) # fixed
 
         self.panel_left = customtkinter.CTkFrame(self.root,
-                                                 fg_color = self.theme_frame)
+                                                 fg_color = self.color_palette.frame,
+                                                 border_color= self.color_palette.frame_edge)
         self.panel_left.grid(row = 0, column = 0, sticky = 'nsew')
 
         self.panel_right = customtkinter.CTkFrame(self.root,
-                                                  fg_color = self.theme_frame,
-                                                  border_color= self.theme_frame_edge)
+                                                 fg_color = self.color_palette.frame,
+                                                 border_color= self.color_palette.frame_edge)
         
         self.panel_right.grid_rowconfigure(0, weight=1)
         self.panel_right.grid_rowconfigure(1, weight=1)
@@ -86,56 +85,56 @@ class WindowManagerMixin:
         # Top frame
         self.panel_right_top = customtkinter.CTkFrame(
             self.panel_right,
-            fg_color=self.theme_frame
+            fg_color=self.color_palette.frame
         )
         self.panel_right_top.grid(row=0, column=0, sticky="nsew")
 
         # Bottom frame
         self.panel_right_bottom = customtkinter.CTkFrame(
             self.panel_right,
-            fg_color=self.theme_frame
+            fg_color=self.color_palette.frame
         )
         self.panel_right_bottom.grid(row=1, column=0, sticky="nsew")
 
         # Input 1 row
         row1 = customtkinter.CTkFrame(self.panel_left,
-                                      fg_color = self.theme_input,
-                                      border_color= self.theme_input_edge)
+                                      fg_color = self.color_palette.frame,
+                                      border_color= self.color_palette.input_edge)
         row1.pack(fill="x", padx=2, pady=10)
         customtkinter.CTkLabel(row1, text="Name:        ", 
-                               fg_color=self.theme_frame,
-                               text_color=self.theme_text).pack(side="left", padx=(0, 5))
+                               fg_color=self.color_palette.frame,
+                               text_color=self.color_palette.text).pack(side="left", padx=(0, 5))
 
         self.naming = customtkinter.CTkEntry(row1, width=50,
-                                      fg_color = self.theme_input,
-                                      border_color= self.theme_input_edge,
-                                      text_color= self.theme_text)
+                                      fg_color = self.color_palette.frame,
+                                      border_color= self.color_palette.input_edge,
+                                      text_color= self.color_palette.text)
         self.naming.insert(0, self.default_name)
         self.naming.pack(side="left", fill="x", expand=True)
 
         # Input 2 row
         row2 = customtkinter.CTkFrame(self.panel_left,
-                                      fg_color = self.theme_input)
+                                      fg_color = self.color_palette.frame)
         row2.pack(fill="x", padx=2, pady=10)
         customtkinter.CTkLabel(row2, text="Expression:", 
-                               fg_color=self.theme_frame,
-                               text_color=self.theme_text).pack(side="left", padx=(0, 5))
+                               fg_color=self.color_palette.frame,
+                               text_color=self.color_palette.text).pack(side="left", padx=(0, 5))
 
         self.entry = customtkinter.CTkTextbox(row2, width=self.textbox_width, height=self.textbox_height,
-                                    fg_color = self.theme_input,
-                                    border_color = self.theme_input_edge,
+                                    fg_color = self.color_palette.frame,
+                                    border_color = self.color_palette.input_edge,
                                     border_width = 2,
-                                    text_color = self.theme_text)
+                                    text_color = self.color_palette.text)
         self.entry.insert('1.0', self.default_input)
         self.entry.pack(side="left", fill="x", expand=True)
 
         self.canvas_plane = customtkinter.CTkCanvas(self.panel_left, 
                                                     width=self.canvas_width, 
                                                     height=self.canvas_height, 
-                                                    bg=self.theme_frame,
+                                                    bg=self.color_palette.frame,
                                                     highlightthickness=1,
-                                                    highlightbackground=self.theme_frame_edge,
-                                                    highlightcolor=self.theme_frame_edge                                                    
+                                                    highlightbackground=self.color_palette.frame,
+                                                    highlightcolor=self.color_palette.frame_edge                                                    
                                                     )
         self.canvas_plane.pack(fill="both", expand=True)        
 

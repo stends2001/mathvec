@@ -15,6 +15,7 @@ from .windowmanager import WindowManagerMixin
 from .figuremanager import FigureManager
 from .savemanager import SaveManagerMixin
 from .popupmanager import PopUpManagerMixin
+from .colorpalette import ColorPalette
 
 from ..backend import PathManager, is_latex_found, require_latex_package, LaTeXPackageNotFoundError, LaTeXNotFoundError
 from ..exceptions import EmptyExpressionError, EmtpyExpressionName
@@ -55,6 +56,8 @@ class MathVecApp(
     """
     _figure: Optional[Figure]
     _history: Dict[str,str]
+    color_palette: ColorPalette
+    
     def __init__(self):
         self._history = {}
         self.latex_supported    = False
@@ -74,7 +77,7 @@ class MathVecApp(
         self.pathmanager= PathManager()
         self.set_config()     
 
-        self.root       = customtkinter.CTk(fg_color=self.theme_frame)
+        self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
         
         self.default_input= ''
         self.default_name = 'equation_1'
@@ -104,6 +107,7 @@ class MathVecApp(
         """reset everything, with the exception of the output directory"""
         self._figure = None
         self._canvas = None
+        self.history_buttons = []
 
         self.entry.delete("1.0", "end")
         self.entry.insert("1.0", self.default_input)
@@ -131,6 +135,7 @@ class MathVecApp(
 
     def clear_history(self):
         self._clear_history()
+        self._update_history_panel()
 
     def insert_from_history(self, name: str, expression_name: str):
         self.reset()
@@ -139,6 +144,7 @@ class MathVecApp(
 
         self.naming.delete(0, "end")
         self.naming.insert(0, name)
+        self._update_history_panel()
 
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""

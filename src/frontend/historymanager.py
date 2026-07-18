@@ -1,8 +1,9 @@
 import tkinter as tk
 import customtkinter
-from typing import Literal, Dict
+from typing import Literal, Dict, List
 import pandas as pd
 
+from .colorpalette import ColorPalette
 from ..backend import PathManager
 
 class HistoryManagerMixin:
@@ -24,26 +25,19 @@ class HistoryManagerMixin:
     latex_supported:    bool
     pathmanager:        PathManager
 
-    theme_main:         str 
-    theme_text:         str
-    theme_frame:        str
-
-    theme_button:       str 
-    theme_button_hover: str
-    theme_button_unavail:str
-    right_panel_width:  int
-
-
     panel_right_bottom: customtkinter.CTkFrame
 
+    color_palette: ColorPalette
+    history_buttons: List[customtkinter.CTkButton]
+
     def manage_history(self):
-        row1 = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.theme_frame)
+        row1 = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame)
         row1.pack(fill="x", padx=2, pady=10)
         customtkinter.CTkLabel(
             row1,
             text="HISTORY",
-            fg_color=self.theme_frame,
-            text_color=self.theme_text,
+            fg_color=self.color_palette.frame,
+            text_color=self.color_palette.text,
             font=customtkinter.CTkFont(size=20, weight="bold")
         ).pack(pady=10)         
 
@@ -71,35 +65,40 @@ class HistoryManagerMixin:
         if filepath.exists():
             filepath.unlink()
 
-
     def _update_history_panel(self) -> None:
         num_expressions = len(self._history)
         buttons = []
 
-        print('history:')
-        print(self._history)
+        # Remove old buttons
+        for btn in self.history_buttons:
+            btn.destroy()
 
-        for n in range(min(num_expressions,9)):
+        self.history_buttons.clear()
 
-            idx   = n + 1
+        # Create new buttons
+        for n in range(min(num_expressions, 9)):
+
+            idx = n + 1
 
             expression_name = self._history.loc[n, "name"]
-            expression      = self._history.loc[n, "expression"]
+            expression = self._history.loc[n, "expression"]
 
-            btn_n = customtkinter.CTkButton(self.panel_right_bottom, 
-                                            text        = f"{idx}. {expression_name}", 
-                                            command= lambda nm = expression_name, expr = expression : self.insert_from_history(nm, expr), 
-                                            fg_color    = self.theme_button, 
-                                            hover_color = self.theme_button_hover)    
-            buttons.append(btn_n)   
+            btn_n = customtkinter.CTkButton(
+                self.panel_right_bottom,
+                text=f"{idx}. {expression_name}",
+                command=lambda nm=expression_name, expr=expression: self.insert_from_history(nm, expr),
+                fg_color=self.color_palette.frame,
+                hover_color=self.color_palette.frame_edge
+            )
 
-        for row, btn in enumerate(buttons):
+            self.history_buttons.append(btn_n)
 
+        # Pack buttons
+        for btn in self.history_buttons:
             btn.pack(
                 fill="y",
                 padx=2,
                 pady=2
             )
-
     def insert_from_history(self, name: str, expression_name: str):
         raise NotImplementedError('this is supposed to be a stub for `insert_from_history()`') 
