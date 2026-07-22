@@ -80,8 +80,8 @@ class HistoryManagerMixin:
 
             idx = n + 1
 
-            expression_name = self._history.loc[n, "name"]
-            expression = self._history.loc[n, "expression"]
+            expression_name = str(self._history.loc[n, "name"])
+            expression      = str(self._history.loc[n, "expression"])
 
             btn_n = customtkinter.CTkButton(
                 self.panel_right_bottom,
