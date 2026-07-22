@@ -1,10 +1,45 @@
 import tkinter as tk
 import customtkinter
-from typing import Literal, Dict, List
+from typing import Literal, Dict, List, Protocol
 import pandas as pd
 
 from .colorpalette import ColorPalette
 from ..backend import PathManager
+
+class _HistoryProtocol(Protocol):
+    panel_right_bottom: customtkinter.CTkFrame
+    root:               customtkinter.CTk
+
+    latex_supported:    bool
+    pathmanager:        PathManager
+
+    panel_right_bottom: customtkinter.CTkFrame
+
+    color_palette: ColorPalette
+    history_buttons: List[customtkinter.CTkButton]
+
+    _history: pd.DataFrame
+
+    def insert_from_history(self, name: str, expression_name: str) -> None:
+        ...
+
+    def manage_history(self) -> None:
+        ...
+
+    def _save_to_history(self) -> None:
+        ...
+
+    def _save_history(self) -> None:
+        ...
+
+    def _load_history(self) -> pd.DataFrame:
+        ...
+
+    def _clear_history(self) -> None:
+        ... 
+
+    def _update_history_panel(self) -> None:
+        ...
 
 class HistoryManagerMixin:
     """
@@ -19,18 +54,8 @@ class HistoryManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    panel_right_bottom: customtkinter.CTkFrame
-    root:               customtkinter.CTk
 
-    latex_supported:    bool
-    pathmanager:        PathManager
-
-    panel_right_bottom: customtkinter.CTkFrame
-
-    color_palette: ColorPalette
-    history_buttons: List[customtkinter.CTkButton]
-
-    def manage_history(self):
+    def manage_history(self: _HistoryProtocol):
         row1 = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame)
         row1.pack(fill="x", padx=2, pady=10)
         customtkinter.CTkLabel(
@@ -43,29 +68,29 @@ class HistoryManagerMixin:
 
         self._history = self._load_history()
 
-    def _save_to_history(self, name: str, expression: str):
+    def _save_to_history(self: _HistoryProtocol, name: str, expression: str):
         self._history.loc[len(self._history)] =  {"name": name, "expression": expression}
         self._update_history_panel()
 
-    def _save_history(self):
+    def _save_history(self: _HistoryProtocol):
         filepath = self.pathmanager.history
 
         self._history.reset_index(drop = True).to_csv(filepath, sep = "\t", index = False)
 
-    def _load_history(self) -> pd.DataFrame:
+    def _load_history(self: _HistoryProtocol) -> pd.DataFrame:
         filepath = self.pathmanager.history
         if filepath.exists():
            return pd.read_csv(filepath, delimiter="\t")
         else:
             return pd.DataFrame(columns=["name", "expression"])
         
-    def _clear_history(self) -> None:
+    def _clear_history(self: _HistoryProtocol) -> None:
         self._history = pd.DataFrame(columns=["name", "expression"])
         filepath = self.pathmanager.history
         if filepath.exists():
             filepath.unlink()
 
-    def _update_history_panel(self) -> None:
+    def _update_history_panel(self: _HistoryProtocol) -> None:
         num_expressions = len(self._history)
         buttons = []
 
@@ -100,5 +125,3 @@ class HistoryManagerMixin:
                 padx=2,
                 pady=2
             )
-    def insert_from_history(self, name: str, expression_name: str):
-        raise NotImplementedError('this is supposed to be a stub for `insert_from_history()`') 
