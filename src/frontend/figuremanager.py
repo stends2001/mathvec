@@ -163,13 +163,13 @@ class FigureManager:
         """update canvas plane with a canvas"""
         
         self._toggle_usetex('off')
-        self._canvas_image = self._draw_canvas()
+        self._canvas = self._draw_canvas()
 
         self.canvas_plane.delete("all")
         self.canvas_plane.create_image(
             0, 0,
             anchor="nw",
-            image=self._canvas_image
+            image=self._canvas
         )
 
         self._toggle_usetex('on')
