@@ -1,8 +1,39 @@
 import tkinter as tk
 import customtkinter
-from typing import Literal
-
+from typing import Literal, Protocol
 from .colorpalette import ColorPalette
+
+class _ButtonProtocol(Protocol):
+    """
+    Protocol that lists methods in MathVecApp, 
+    as fallback for ButtonManagerMixin
+    """
+    panel_right_top:    customtkinter.CTkFrame
+    root:               customtkinter.CTk
+
+    latex_supported:    bool
+    latex_supported:    bool
+
+    color_palette: ColorPalette
+    right_panel_width:  int
+
+    def reset(self) -> None:
+        ...
+    
+    def view(self) -> None:
+        ...
+    
+    def save(self, extension: Literal['png','svg']) -> None:
+        ...
+    
+    def set_output_dir(self) -> None:
+        ...   
+    
+    def quit_app(self) -> None:
+        ...                
+    
+    def clear_history(self) -> None:
+        ...           
 
 class ButtonManagerMixin:
     """
@@ -17,15 +48,7 @@ class ButtonManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    panel_right_top: customtkinter.CTkFrame
-    root: customtkinter.CTk
-
-    latex_supported:    bool
-
-    color_palette: ColorPalette
-    right_panel_width:  int
-
-    def manage_buttons(self):
+    def manage_buttons(self: _ButtonProtocol):
 
         # BUTTONS - INDEPENDENT ON LATEX
 
@@ -90,20 +113,3 @@ class ButtonManagerMixin:
                     pady=2
                 )
 
-    def reset(self):
-        raise NotImplementedError('this is supposed to be a stub for `reset()`')
-    
-    def view(self):
-        raise NotImplementedError('this is supposed to be a stub for `view()`')
-    
-    def save(self, extension: Literal['png','svg']):
-        raise NotImplementedError('this is supposed to be a stub for `save()`')     
-    
-    def set_output_dir(self):
-        raise NotImplementedError('this is supposed to be a stub for `set_output_dir()`')           
-    
-    def quit_app(self):
-        raise NotImplementedError('this is supposed to be a stub for `quit_app()`')                   
-    
-    def clear_history(self):
-        raise NotImplementedError('this is supposed to be a stub for `clear_history()`')          
