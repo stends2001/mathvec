@@ -26,7 +26,7 @@ class _HistoryProtocol(Protocol):
     def manage_history(self) -> None:
         ...
 
-    def _save_to_history(self) -> None:
+    def _save_to_history(self, name: str, expression: str) -> None:
         ...
 
     def _save_history(self) -> None:
@@ -67,12 +67,13 @@ class HistoryManagerMixin:
         ).pack(pady=10)         
 
         self._history = self._load_history()
+        self._update_history_panel()
 
     def _save_to_history(self: _HistoryProtocol, name: str, expression: str):
         self._history.loc[len(self._history)] =  {"name": name, "expression": expression}
         self._update_history_panel()
 
-    def _save_history(self: _HistoryProtocol):
+    def _save_history(self: _HistoryProtocol) -> None:
         filepath = self.pathmanager.history
 
         self._history.reset_index(drop = True).to_csv(filepath, sep = "\t", index = False)
@@ -92,7 +93,6 @@ class HistoryManagerMixin:
 
     def _update_history_panel(self: _HistoryProtocol) -> None:
         num_expressions = len(self._history)
-        buttons = []
 
         # Remove old buttons
         for btn in self.history_buttons:
