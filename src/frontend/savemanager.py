@@ -1,8 +1,29 @@
-from typing import Literal, assert_never
+from typing import Literal, assert_never, Protocol
 from matplotlib.figure import Figure
 from pathlib import Path
 
 from ..exceptions import EmtpyExpressionName, EmptyExpressionError
+
+class _SaveProtocol(Protocol):
+    output_dir: Path
+
+    @property
+    def figure(self) -> Figure:
+        ...
+    
+    @property 
+    def expression_input(self) -> str:
+        ...
+    
+    @property 
+    def expression_name(self) -> str:
+        ...
+    
+    def _savefig(self, extension: Literal['svg','png']) -> Path:
+        ...
+
+    def _resolve_filename(self, path: Path) -> Path:
+        ...
 
 class SaveManagerMixin:
     """
@@ -21,24 +42,8 @@ class SaveManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    output_dir: Path
 
-    @property
-    def figure(self) -> Figure:
-        """stub. actually defined on ViewerManagerMixin class"""
-        raise NotImplementedError
-    
-    @property 
-    def expression_input(self) -> str:
-        """stub. actually defined on main class"""
-        raise NotImplementedError
-    
-    @property 
-    def expression_name(self) -> str:
-        """stub. actually defined on main class"""        
-        raise NotImplementedError
-    
-    def _savefig(self, extension: Literal['svg','png']) -> Path:
+    def _savefig(self: _SaveProtocol, extension: Literal['svg','png']) -> Path:
         """saves figure under resolved filename with inputted extension. Returns path"""
         if self.expression_input == '':
             raise EmptyExpressionError('SAVE')
@@ -75,7 +80,7 @@ class SaveManagerMixin:
 
         return path    
 
-    def _resolve_filename(self, path: Path) -> Path:
+    def _resolve_filename(self: _SaveProtocol, path: Path) -> Path:
         """
         if filename already exists, gets the first integer in filename as "(idx)" that doesn't exist
         otherwise, it's returned unchanged
