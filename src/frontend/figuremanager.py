@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter
-from typing import Optional, Literal, assert_never
+from typing import Optional, Literal, assert_never, Protocol
 from io import BytesIO
 from matplotlib.mathtext import MathTextParser
 from PIL import Image, ImageTk
@@ -10,8 +10,45 @@ from matplotlib.axes import Axes
 import matplotlib.pyplot as plt
 
 from ..exceptions import EmptyExpressionError
-
 from .colorpalette import ColorPalette
+
+class _FigureProtocol(Protocol):
+    canvas_plane:   customtkinter.CTkCanvas
+
+    figure_height:  int 
+    figure_width:   int 
+    figure_dpi:     int
+    figure_textsize:int
+
+    canvas_width:   int 
+    canvas_height:  int
+    canvas_textsize:int
+
+    _figure:        Optional[Figure]
+    _canvas:        Optional[ImageTk.PhotoImage]
+    
+    color_palette: ColorPalette    
+
+    @property 
+    def expression_input(self) -> str:
+        ...
+    
+    @property 
+    def expression_name(self) -> str:
+        ...
+
+    def _toggle_usetex(self, mode: Literal['on','off']) -> None:
+        ...
+
+    def _draw_figure(self) -> Figure:        
+        ...
+
+    def _draw_canvas(self) ->  ImageTk.PhotoImage:        
+        ...
+
+    def _update_canvas(self) -> None:
+        ...
+
 class FigureManager:
     """
     Mixin class to MathVecApp
@@ -31,39 +68,15 @@ class FigureManager:
     --------
     For more information, see main class MathVecApp
     """
-    canvas_plane:   customtkinter.CTkCanvas
-
-    figure_height:  int 
-    figure_width:   int 
-    figure_dpi:     int
-    figure_textsize:int
-
-    canvas_width:   int 
-    canvas_height:  int
-    canvas_textsize:int
-
-    _figure:        Optional[Figure]
-    _canvas:        Optional[ImageTk.PhotoImage]
-    
-    color_palette: ColorPalette    
-    @property 
-    def expression_input(self) -> str:
-        """stub. actually defined on main class"""
-        raise NotImplementedError
-    
-    @property 
-    def expression_name(self) -> str:
-        """stub. actually defined on main class"""        
-        raise NotImplementedError
 
     @property
-    def figure(self) -> Figure:
+    def figure(self: _FigureProtocol) -> Figure:
         """return figure"""        
         if self._figure is None:
             return self._draw_figure()
         return self._figure
 
-    def _toggle_usetex(self, mode: Literal['on','off']) -> None:
+    def _toggle_usetex(self: _FigureProtocol, mode: Literal['on','off']) -> None:
         """turn or or off the usetex matplotlib mode"""
         match mode:
             case 'on':
@@ -75,7 +88,7 @@ class FigureManager:
             case _:
                 assert_never(mode)      
 
-    def _draw_figure(self) -> Figure:
+    def _draw_figure(self: _FigureProtocol) -> Figure:
         """
         Draw figure: that is, an image of proper latex code. 
         To be viewed or saved. Both returned, and stored in `self._figure`
@@ -106,7 +119,7 @@ class FigureManager:
         self._figure = fig
         return fig
 
-    def _draw_canvas(self) ->  ImageTk.PhotoImage:
+    def _draw_canvas(self: _FigureProtocol) ->  ImageTk.PhotoImage:
         """
         Draw canvas: that is, an image of previewing matplotlib math.
         """
@@ -146,7 +159,7 @@ class FigureManager:
 
         return ImageTk.PhotoImage(img)
 
-    def _update_canvas(self) -> None:
+    def _update_canvas(self: _FigureProtocol) -> None:
         """update canvas plane with a canvas"""
         
         self._toggle_usetex('off')
