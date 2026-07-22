@@ -5,9 +5,10 @@ You can run it by running `runapp.py` in the project root.
 
 ## TODO
 - tests
-- stubs -> protocols
-- packaging .toml
 - BUG: history keeps duplicating. In addition, the same name appearing newly should remove old entries with that name in history.
+- BUG: edge-frame color is not being used
+- IMPLEMENT: scroll bar over history
+- IMPLEMENT: vertically-extending input frame
 
 ## Requirements
 Python 3.10+, tkinter (usually a standard library), and a LaTeX distribution (e.g. TeX Live or MiKTeX) available on your PATH. Also note, specifically the following LaTeX packages are used:
