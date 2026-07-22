@@ -24,8 +24,8 @@ class _FigureProtocol(Protocol):
     canvas_height:  int
     canvas_textsize:int
 
-    _figure:        Optional[Figure]
-    _canvas:        Optional[ImageTk.PhotoImage]
+    _figure:        Figure | None
+    _canvas:        ImageTk.PhotoImage | None
     
     color_palette: ColorPalette    
 
