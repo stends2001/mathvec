@@ -1,12 +1,13 @@
 import tkinter as tk
-from typing import Optional, Literal, Dict
+from typing import Optional, Literal, Dict, List
 from tkinter import filedialog
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.figure import Figure
 from pathlib import Path
-
+import pandas as pd
 import customtkinter
+from PIL import ImageTk
 
 from .configmanager import ConfigManagerMixin
 from .buttonmanager import ButtonManagerMixin
@@ -54,14 +55,14 @@ class MathVecApp(
     - FigureManager
     - SaveManagerMixin
     """
-    _figure: Optional[Figure]
-    _history: Dict[str,str]
-    color_palette: ColorPalette
+    _figure:        Figure | None
+    _canvas:        ImageTk.PhotoImage | None
+    _history:       pd.DataFrame
+
+    color_palette:  ColorPalette
     
     def __init__(self):
-        self._history = {}
         self.latex_supported    = False
-
         latex_on_path           = is_latex_found()
 
         if latex_on_path:
@@ -79,9 +80,11 @@ class MathVecApp(
 
         self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
         
-        self.default_input= ''
-        self.default_name = 'equation_1'
-        self.output_dir   = self.pathmanager.output
+        self.default_input: str = ''
+        self.default_name:  str = 'equation_1'
+        self.output_dir:    Path= self.pathmanager.output
+
+        self.history_buttons: List[customtkinter.CTkButton] = []
                   
         self.configure_window()   
         self.manage_buttons()     
@@ -89,10 +92,10 @@ class MathVecApp(
         self.reset()
 
         def _on_change():
-            self._figure = None   # invalidate cached VIEW/SAVE figure
+            self._figure = None
             self._update_canvas()
 
-        self.entry.bind("<KeyRelease>", lambda e: _on_change())
+        self.entry.bind("<KeyRelease>",  lambda e: _on_change())
         self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
 
     def run_app(self):
@@ -101,14 +104,12 @@ class MathVecApp(
 
     def quit_app(self):
         self._save_history()
-        self.root.destroy()          # or self.root.destroy()
+        self.root.destroy()
 
     def reset(self):
         """reset everything, with the exception of the output directory"""
         self._figure = None
         self._canvas = None
-        self.history_buttons = []
-
         self.entry.delete("1.0", "end")
         self.entry.insert("1.0", self.default_input)
 
