@@ -86,21 +86,24 @@ class ButtonManagerMixin:
                          text='VIEW' if self.latex_supported else '❌VIEW', 
                          command=self.view, 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         text_color = 'white' if self.latex_supported else 'black'
                          )  
         
         btn3 = customtkinter.CTkButton(self.panel_right_top, 
                          text='SAVE .svg' if self.latex_supported else '❌SAVE .svg', 
                          command= lambda ext = 'svg': self.save(ext), 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         text_color = 'white' if self.latex_supported else 'black'
                          )   
 
         btn4 = customtkinter.CTkButton(self.panel_right_top, 
                          text='SAVE .png' if self.latex_supported else '❌SAVE .png', 
                          command= lambda ext = 'png': self.save(ext), 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail
+                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
+                         text_color = 'white' if self.latex_supported else 'black'
                          )              
 
         for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7]):
