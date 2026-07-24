@@ -212,16 +212,52 @@ class WindowManagerMixin:
             sticky="nsew"
         )
 
-    def _configure_canvas(self):
-        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, 
-                                                    # width=self.canvas_width, 
-                                                    # height=self.canvas_height, 
-                                                    bg=self.color_palette.frame,
-                                                    # highlightthickness=1,
-                                                    # highlightbackground="white",
-                                                    # highlightcolor='white'                                                
-                                                    )
+    def _fill_history_plane(self):
+        self.history_plane = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame)
+        self.history_lbl   = customtkinter.CTkLabel(
+            self.history_plane,
+            text="HISTORY",
+            fg_color=None,
+            text_color=self.color_palette.text,
+            font=customtkinter.CTkFont(size=20, weight="bold")
+        )  
+
+        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame, border_width = 2, border_color='red')
+
+        # Allow textbox area to expand
+        self.history_plane.grid_rowconfigure(0, weight=0)
+        self.history_plane.grid_rowconfigure(1, weight=1)
+        self.history_plane.grid_columnconfigure(0, weight=1)
+
+        self.history_lbl.grid(
+            row=0,
+            column=0,
+            padx=5,
+            pady=5,
+            sticky="nw"
+        )
+
+        self.history_list.grid(
+            row=1,
+            column=0,
+            padx=5,
+            pady=5,
+            sticky="nsew"
+        )
+
+        self.history_plane.grid(
+            row=1,
+            column=0,
+            padx=10,
+            pady=10,
+            sticky="nsew"
+        )
+
+
+    def _fill_canvas_plane(self):
+        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame )
         self.canvas_plane.pack(fill="both", expand=True)      
+
 
     def configure_panels(self):
         """window division into planes"""
@@ -242,4 +278,5 @@ class WindowManagerMixin:
         self._configure_sub()
 
         self._configure_subsub()
-        self._configure_canvas()
+        self._fill_history_plane()
+        self._fill_canvas_plane()
