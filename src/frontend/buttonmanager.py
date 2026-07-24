@@ -35,6 +35,9 @@ class _ButtonProtocol(Protocol):
     def clear_history(self) -> None:
         ...           
 
+    def change_theme(self) -> None:
+        ...
+
 class ButtonManagerMixin:
     """
     Mixin class to MathVecApp
@@ -67,19 +70,25 @@ class ButtonManagerMixin:
                                        fg_color = self.color_palette.button, 
                                        hover_color= self.color_palette.button_hover)
 
-        btn7 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="EXIT", 
-                                       command=self.quit_app, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)      
-        
         btn6 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="CLEAR HISTORY", 
                                        command=self.clear_history, 
                                        fg_color = self.color_palette.button, 
                                        hover_color= self.color_palette.button_hover)      
+
+        btn7 = customtkinter.CTkButton(self.panel_right_top, 
+                                       text="CHANGE THEME", 
+                                       command=self.change_theme, 
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)  
+
+        btn8 = customtkinter.CTkButton(self.panel_right_top, 
+                                       text="EXIT", 
+                                       command=self.quit_app, 
+                                       fg_color = self.color_palette.button, 
+                                       hover_color= self.color_palette.button_hover)      
         
-                                    
+     
 
         # button2: view expression
         btn2 = customtkinter.CTkButton(self.panel_right_top, 
@@ -106,7 +115,7 @@ class ButtonManagerMixin:
                          text_color = 'white' if self.latex_supported else 'black'
                          )              
 
-        for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7]):
+        for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8]):
       
             btn.grid(
                     row=row,
