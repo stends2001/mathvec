@@ -10,6 +10,7 @@ You can run it by running `runapp.py` in the project root.
 - IMPLEMENT: scroll bar over history
 - IMPLEMENT: vertically-extending input frame
 - IMPLEMENT: button to toggle darkmode/lightmode
+- ADAPT: color themes
 - IMPLEMENT: in history, allow the removal of an expression from history
 
 ## Requirements
