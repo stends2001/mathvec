@@ -37,7 +37,7 @@ class WindowManagerMixin:
 
     color_palette:      ColorPalette
 
-    def _setup_windows(self):
+    def _setup_window(self):
         """initial window setup"""
         self.root.title(self.title)
         screen_width    = self.root.winfo_screenwidth()
@@ -53,7 +53,7 @@ class WindowManagerMixin:
 
     def configure_panels(self):
         """window division into planes"""
-        self._setup_windows()
+        self._setup_window()
         
         # two columns: a large one with input and latex preview, and one on the right for buttons
         self.root.grid_columnconfigure(0, weight = 1) # grows
@@ -73,10 +73,10 @@ class WindowManagerMixin:
         # right panel is divided into right_top and right_bottom
         # right_top: button panel
         # right_bottom: history panel
-        self.panel_right.grid_rowconfigure(0, weight=1)
-        self.panel_right.grid_rowconfigure(1, weight=6)
+        self.panel_right.grid_rowconfigure(0, weight=0)
+        self.panel_right.grid_rowconfigure(1, weight=1)
         self.panel_right.grid_columnconfigure(0, weight=1)
-        self.panel_right.grid_propagate(False)
+        self.panel_right.grid_propagate(True)
 
         # right_top: button panel
         self.panel_right_top = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame, border_color= 'red') # border color doesn't show
@@ -90,19 +90,21 @@ class WindowManagerMixin:
         # left_top: input_panel
         # left_bottom: canvas panel
         self.panel_left.grid_rowconfigure(0, weight=1)
-        self.panel_left.grid_rowconfigure(1, weight=1)
+        self.panel_left.grid_rowconfigure(1, weight=10)
         self.panel_left.grid_columnconfigure(0, weight=1)
         self.panel_right.grid_propagate(True)
 
         # left_top: input panel
         self.panel_left_top = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame, border_color= 'red') # border color doesn't show
         self.panel_left_top.grid(row=0, column=0, sticky="nsew")
+        self.panel_left_top.grid_rowconfigure(0, weight=0)  # name row
+        self.panel_left_top.grid_rowconfigure(1, weight=1)  # expression row        
 
         # left_bottom: canvas panel
         self.panel_left_bottom = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame, border_color = 'red') # border color doesn't show
         self.panel_left_bottom.grid(row=1, column=0, sticky="nsew")        
 
-        row1 = customtkinter.CTkFrame(self.panel_left_top, fg_color = self.color_palette.frame, border_color= self.color_palette.input_edge)
+        row1 = customtkinter.CTkFrame(self.panel_left_top, fg_color = self.color_palette.frame)
         row1.pack(fill="x", padx=2, pady=10)
         customtkinter.CTkLabel(row1, text="Name:        ",  fg_color=self.color_palette.frame, text_color=self.color_palette.text).pack(side="left", padx=(0, 5))
 
@@ -129,8 +131,8 @@ class WindowManagerMixin:
                                                     # height=self.canvas_height, 
                                                     bg=self.color_palette.frame,
                                                     highlightthickness=1,
-                                                    highlightbackground=self.color_palette.frame,
-                                                    highlightcolor=self.color_palette.frame_edge                                                    
+                                                    highlightbackground="white",
+                                                    highlightcolor='white'                                                
                                                     )
         self.canvas_plane.pack(fill="both", expand=True)        
 
