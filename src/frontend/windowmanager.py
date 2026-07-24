@@ -60,10 +60,11 @@ class WindowManagerMixin:
         self.root.grid_rowconfigure(0, weight=1)
 
         self.panel_left  = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame)
-        self.panel_right = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame)
+        self.panel_right = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame, width=self.right_panel_width)
         
         self.panel_left.grid(row = 0,  column = 0, sticky = 'nsew')
-        self.panel_right.grid(row = 0, column = 1, sticky = 'ns')        
+        self.panel_right.grid(row = 0, column = 1, sticky = 'ns') 
+        self.panel_right.grid_propagate(False)        
 
     def _configure_sub(self):
         """divides left and right panels, each, into top and bottom"""        
@@ -75,11 +76,11 @@ class WindowManagerMixin:
         self.panel_right.grid_propagate(True)
 
         # right_top: button panel
-        self.panel_right_top = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame)
+        self.panel_right_top = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame, width = self.right_panel_width)
         self.panel_right_top.grid(row=0, column=0, sticky="nsew")
 
         # right_bottom: history panel
-        self.panel_right_bottom = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame)
+        self.panel_right_bottom = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame, width = self.right_panel_width)
         self.panel_right_bottom.grid(row=1, column=0, sticky="nsew")
 
         # ========= left main - panel ========== #
@@ -213,26 +214,28 @@ class WindowManagerMixin:
         )
 
     def _fill_history_plane(self):
-        self.history_plane = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame)
+        self.history_plane = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame, width=self.right_panel_width)
         self.history_lbl   = customtkinter.CTkLabel(
             self.history_plane,
             text="HISTORY",
             fg_color=None,
             text_color=self.color_palette.text,
-            font=customtkinter.CTkFont(size=20, weight="bold")
+            font=customtkinter.CTkFont(size=20, weight="bold"),
+            width = int(0.9 * self.right_panel_width)
         )  
 
-        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame)
+        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame, width=self.right_panel_width)
 
         # Allow textbox area to expand
         self.history_plane.grid_rowconfigure(0, weight=0)
         self.history_plane.grid_rowconfigure(1, weight=1)
         self.history_plane.grid_columnconfigure(0, weight=1)
+        self.history_plane.propagate(False)
 
         self.history_lbl.grid(
             row=0,
             column=0,
-            padx=5,
+            padx=0,
             pady=5,
             sticky="nw"
         )
@@ -240,7 +243,7 @@ class WindowManagerMixin:
         self.history_list.grid(
             row=1,
             column=0,
-            padx=5,
+            padx=0,
             pady=5,
             sticky="nsew"
         )
@@ -248,7 +251,7 @@ class WindowManagerMixin:
         self.history_plane.grid(
             row=1,
             column=0,
-            padx=10,
+            padx=0,
             pady=10,
             sticky="nsew"
         )
