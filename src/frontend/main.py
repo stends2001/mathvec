@@ -18,7 +18,7 @@ from .savemanager import SaveManagerMixin
 from .popupmanager import PopUpManagerMixin
 from .colorpalette import ColorPalette
 
-from ..backend import PathManager, is_latex_found, require_latex_package, LaTeXPackageNotFoundError, LaTeXNotFoundError
+from ..backend import PathManager, has_latex, has_latex_package
 from ..exceptions import EmptyExpressionError, EmtpyExpressionName
 
 class MathVecApp(
@@ -60,22 +60,12 @@ class MathVecApp(
     _history:       pd.DataFrame
 
     color_palette:  ColorPalette
+    latex_supported: bool
     
     def __init__(self):
-        self.latex_supported    = False
-        latex_on_path           = is_latex_found()
-
-        if latex_on_path:
-            try:
-                require_latex_package('amsmath')
-                self._toggle_usetex('on')
-                mpl.rcParams["text.latex.preamble"] = r"\usepackage{amsmath}"
-                self.latex_supported = True
-
-            except LaTeXPackageNotFoundError:
-                print('No LaTeX found. Some functions may not available')
 
         self.pathmanager= PathManager()
+        self._validate_latex()
         self.set_config()     
 
         self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
@@ -97,6 +87,28 @@ class MathVecApp(
 
         self.entry.bind("<KeyRelease>",  lambda e: _on_change())
         self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
+
+    def _validate_latex(self):
+
+        latex_packages          = ['amsmath']
+        latex_on_path           = not has_latex()
+
+        self.latex_supported    = False
+
+        # if latex found, test whether required packages are supported
+        if latex_on_path:
+            for pkg in latex_packages:
+                if not has_latex_package(pkg):
+                    self.popup_latex_issue(f'Package {pkg} not found.')
+                    break
+
+                self.latex_supported = True
+                self._toggle_usetex('on')
+                mpl.rcParams["text.latex.preamble"] = fr"\usepackage{pkg}"   
+
+        # if no latex found, popup saying not all funcationality available
+        else:
+            self.popup_latex_issue('LaTeX installation was not found.')
 
     def run_app(self):
         """main function to run the app"""
@@ -121,7 +133,7 @@ class MathVecApp(
     def view(self) -> None:
         """preview expression in separate window"""
         if not self.latex_supported:
-            self.button_unavailable('VIEW')
+            self.popup_button_unavailable('VIEW')
             return None
         
         try:
@@ -150,11 +162,11 @@ class MathVecApp(
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""
         if not self.latex_supported:
-            self.button_unavailable('SAVE')
+            self.popup_button_unavailable('SAVE')
             return None
         try:         
             path = self._savefig(extension)
-            self.figure_saved(str(path))  
+            self.popup_figure_saved(str(path))  
             self._save_to_history(self.expression_name, self.expression_input)
         
         except (EmptyExpressionError,  EmtpyExpressionName) as e:
@@ -169,7 +181,7 @@ class MathVecApp(
             output_dir = self.pathmanager.output
         
         self.output_dir = output_dir
-        self.path_adjusted(str(self.output_dir))              
+        self.popup_path_adjusted(str(self.output_dir))              
 
     @property 
     def expression_input(self) -> str:

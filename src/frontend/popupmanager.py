@@ -13,16 +13,15 @@ class PopUpManagerMixin:
     --------
     For more information, see main class MathVecApp
     """
-    panel_right: customtkinter.CTkFrame
-    root: customtkinter.CTk
 
-    latex_supported:    bool
+    def popup_latex_issue(self, msg: str):
+        messagebox.showwarning("LaTeX issue", f'{msg} Some functionality may be compromised.')
 
-    def button_unavailable(self, button_label: str):
-        messagebox.showerror("Unavailable", f'{button_label} is unavailable since LaTeX installation not found.')
+    def popup_button_unavailable(self, button_label: str):
+        messagebox.showerror("Unavailable", f'{button_label} is unavailable since LaTeX issues were found.')
 
-    def figure_saved(self, path: str):
+    def popup_figure_saved(self, path: str):
         messagebox.showinfo("Saved", f'figure saved in\n{path}')
 
-    def path_adjusted(self, path: str):
+    def popup_path_adjusted(self, path: str):
         messagebox.showinfo("Directory set", f'Directory changed to\n{path}')        

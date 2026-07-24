@@ -1,2 +1,2 @@
 from .pathmanager import PathManager
-from .latex_check import is_latex_found, require_latex_package, LaTeXNotFoundError, LaTeXPackageNotFoundError
+from .latex_validation import has_latex, has_latex_package
