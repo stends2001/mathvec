@@ -107,10 +107,16 @@ class HistoryManagerMixin:
 
             row.grid_columnconfigure(0, weight=1)
 
+            button_text             = f"{idx}. {expression_name}"
+            max_button_textsize     = 23
+
+            if len(button_text) > max_button_textsize:
+                button_text = button_text[:max_button_textsize-3]+"..."
+
             # Main history button
             btn = customtkinter.CTkButton(
                 row,
-                text=f"{idx}. {expression_name}",
+                text=button_text,
                 command=lambda nm=expression_name, expr=expression: self.insert_from_history(nm, expr),
                 fg_color=self.color_palette.frame,
                 hover_color=self.color_palette.frame_edge,
