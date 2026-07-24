@@ -76,7 +76,7 @@ class MathVecApp(
 
         self.history_buttons: List[customtkinter.CTkButton] = []
                   
-        self.configure_window()   
+        self.configure_panels()   
         self.manage_buttons()     
         self.manage_history()
         self.reset()
@@ -85,13 +85,15 @@ class MathVecApp(
             self._figure = None
             self._update_canvas()
 
+            print(f'Text now is: {len(self.expression_input)} chars long over {len(self.expression_input.splitlines())} lines.')
+
         self.entry.bind("<KeyRelease>",  lambda e: _on_change())
         self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
 
     def _validate_latex(self):
 
         latex_packages          = ['amsmath']
-        latex_on_path           = not has_latex()
+        latex_on_path           = has_latex()
 
         self.latex_supported    = False
 
@@ -104,7 +106,7 @@ class MathVecApp(
 
                 self.latex_supported = True
                 self._toggle_usetex('on')
-                mpl.rcParams["text.latex.preamble"] = fr"\usepackage{pkg}"   
+                mpl.rcParams["text.latex.preamble"] = fr"\usepackage{{{pkg}}}"
 
         # if no latex found, popup saying not all funcationality available
         else:
