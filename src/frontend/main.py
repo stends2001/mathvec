@@ -120,6 +120,9 @@ class MathVecApp(
         self._save_history()
         self.root.destroy()
 
+    def change_theme(self):
+        print('To be implemented')
+
     def reset(self):
         """reset everything, with the exception of the output directory"""
         self._figure = None
