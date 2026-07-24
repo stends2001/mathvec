@@ -74,7 +74,7 @@ class MathVecApp(
         self.default_name:  str = 'equation_1'
         self.output_dir:    Path= self.pathmanager.output
 
-        self.history_buttons: List[customtkinter.CTkButton] = []
+        self.history_buttons: List[customtkinter.CTkFrame] = []
                   
         self.configure_panels()   
         self.manage_buttons()     
@@ -163,6 +163,10 @@ class MathVecApp(
         self.naming.delete(0, "end")
         self.naming.insert(0, name)
         self._update_history_panel()
+
+    def _remove_from_history(self, name: str):
+        self._history = self._history[self._history['name'] != name].reset_index(drop=True)
+        self._update_history_panel()        
 
     def save(self, extension: Literal['svg','png']) -> None:
         """save expression"""

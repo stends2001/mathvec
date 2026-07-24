@@ -59,8 +59,8 @@ class WindowManagerMixin:
         self.root.grid_columnconfigure(1, weight = 0) # fixed
         self.root.grid_rowconfigure(0, weight=1)
 
-        self.panel_left  = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame, border_color= self.color_palette.frame_edge)
-        self.panel_right = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame, border_color= self.color_palette.frame_edge)
+        self.panel_left  = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame)
+        self.panel_right = customtkinter.CTkFrame(self.root, fg_color = self.color_palette.frame)
         
         self.panel_left.grid(row = 0,  column = 0, sticky = 'nsew')
         self.panel_right.grid(row = 0, column = 1, sticky = 'ns')        
@@ -75,11 +75,11 @@ class WindowManagerMixin:
         self.panel_right.grid_propagate(True)
 
         # right_top: button panel
-        self.panel_right_top = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame, border_color= 'white', border_width=2) # border color doesn't show
+        self.panel_right_top = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame)
         self.panel_right_top.grid(row=0, column=0, sticky="nsew")
 
         # right_bottom: history panel
-        self.panel_right_bottom = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame, border_color = 'white', border_width=2)
+        self.panel_right_bottom = customtkinter.CTkFrame(self.panel_right, fg_color=self.color_palette.frame)
         self.panel_right_bottom.grid(row=1, column=0, sticky="nsew")
 
         # ========= left main - panel ========== #
@@ -88,13 +88,13 @@ class WindowManagerMixin:
         self.panel_left.grid_columnconfigure(0, weight=1)
         self.panel_right.grid_propagate(True)        
 
-        self.panel_left_top = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame, border_color = 'white', border_width=2)
+        self.panel_left_top = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame)
         self.panel_left_top.grid(row=0, column=0, sticky="nsew")
         self.panel_left_top.grid_rowconfigure(0, weight=0)  # name row
         self.panel_left_top.grid_rowconfigure(1, weight=1)  # expression row        
 
         # left_bottom: canvas panel
-        self.panel_left_bottom = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame, border_color = 'white', border_width=2)
+        self.panel_left_bottom = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame)
         self.panel_left_bottom.grid(row=1, column=0, sticky="nsew")      
 
     def _configure_subsub(self):
@@ -222,7 +222,7 @@ class WindowManagerMixin:
             font=customtkinter.CTkFont(size=20, weight="bold")
         )  
 
-        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame, border_width = 2, border_color='red')
+        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame)
 
         # Allow textbox area to expand
         self.history_plane.grid_rowconfigure(0, weight=0)
@@ -255,7 +255,7 @@ class WindowManagerMixin:
 
 
     def _fill_canvas_plane(self):
-        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame )
+        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame)
         self.canvas_plane.pack(fill="both", expand=True)      
 
 
