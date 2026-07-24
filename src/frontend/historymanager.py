@@ -61,6 +61,11 @@ class HistoryManagerMixin:
         self._update_history_panel()
 
     def _save_to_history(self: _HistoryProtocol, name: str, expression: str):
+
+        # if name is already present, remove
+        if name in self._history['name'].unique():
+            self._remove_from_history(name)
+
         self._history.loc[len(self._history)] =  {"name": name, "expression": expression}
         self._update_history_panel()
 
