@@ -61,6 +61,7 @@ class MathVecApp(
 
     color_palette:  ColorPalette
     latex_supported: bool
+    max_history_entries: int = 1000
     
     def __init__(self):
 

@@ -5,9 +5,6 @@ You can run it by running `runapp.py` in the project root.
 
 ## TODO
 - tests
-- BUG: history keeps duplicating. In addition, the same name appearing newly should remove old entries with that name in history.
-- BUG: edge-frame color is not being used
-- IMPLEMENT: scroll bar over history
 - IMPLEMENT: button to toggle darkmode/lightmode
 - ADAPT: color themes
 

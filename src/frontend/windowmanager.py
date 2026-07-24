@@ -214,7 +214,9 @@ class WindowManagerMixin:
         )
 
     def _fill_history_plane(self):
-        self.history_plane = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame, width=self.right_panel_width)
+        scrollbar_width = 15
+
+        self.history_plane = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame, width=self.right_panel_width-scrollbar_width)
         self.history_lbl   = customtkinter.CTkLabel(
             self.history_plane,
             text="HISTORY",
@@ -224,7 +226,15 @@ class WindowManagerMixin:
             width = int(0.9 * self.right_panel_width)
         )  
 
-        self.history_list = customtkinter.CTkFrame(self.history_plane, fg_color = self.color_palette.frame, width=self.right_panel_width)
+        self.history_list =  customtkinter.CTkScrollableFrame(
+            self.history_plane,
+            fg_color=self.color_palette.frame,
+            width=self.right_panel_width-scrollbar_width,
+            corner_radius=0,
+            border_width=0,
+            label_text="",
+        )
+        
 
         # Allow textbox area to expand
         self.history_plane.grid_rowconfigure(0, weight=0)
@@ -258,7 +268,7 @@ class WindowManagerMixin:
 
 
     def _fill_canvas_plane(self):
-        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame)
+        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame, highlightthickness=0)   # kills the default border
         self.canvas_plane.pack(fill="both", expand=True)      
 
 

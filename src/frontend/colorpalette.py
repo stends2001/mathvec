@@ -13,3 +13,4 @@ class ColorPalette:
   button_unavail:   str
   
   canvas_bg:        str
+  scrollbar:        str

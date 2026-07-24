@@ -7,7 +7,7 @@ from .colorpalette import ColorPalette
 from ..backend import PathManager
 
 class _HistoryProtocol(Protocol):
-    history_list: customtkinter.CTkFrame
+    history_list:       customtkinter.CTkScrollableFrame
     root:               customtkinter.CTk
 
     latex_supported:    bool
@@ -15,6 +15,7 @@ class _HistoryProtocol(Protocol):
 
     color_palette: ColorPalette
     history_buttons: List[customtkinter.CTkFrame]
+    max_history_entries: int
 
     _history: pd.DataFrame
 
@@ -97,7 +98,7 @@ class HistoryManagerMixin:
         self.history_buttons.clear()
 
         # Create new buttons
-        for n in range(min(num_expressions, 9)):
+        for n in range(min(num_expressions, self.max_history_entries)):
 
             idx = n + 1
 
@@ -113,7 +114,7 @@ class HistoryManagerMixin:
             row.grid_columnconfigure(0, weight=1)
 
             button_text             = f"{idx}. {expression_name}"
-            max_button_textsize     = 23
+            max_button_textsize     = 21
 
             if len(button_text) > max_button_textsize:
                 button_text = button_text[:max_button_textsize-3]+"..."
@@ -161,4 +162,15 @@ class HistoryManagerMixin:
                 fill="x",
                 padx=2,
                 pady=2
+            )
+
+        if num_expressions > 6:
+            self.history_list._scrollbar.configure(
+                button_color= self.color_palette.scrollbar,
+                button_hover_color=self.color_palette.scrollbar
+            )
+        else:
+            self.history_list._scrollbar.configure(
+                button_color=self.color_palette.frame,                  # matches bg, "invisible"
+                button_hover_color=self.color_palette.frame,
             )
