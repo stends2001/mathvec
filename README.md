@@ -9,6 +9,7 @@ You can run it by running `runapp.py` in the project root.
 - BUG: edge-frame color is not being used
 - IMPLEMENT: scroll bar over history
 - IMPLEMENT: vertically-extending input frame
+- IMPLEMENT: button to toggle darkmode/lightmode
 
 ## Requirements
 Python 3.10+, tkinter (usually a standard library), and a LaTeX distribution (e.g. TeX Live or MiKTeX) available on your PATH. Also note, specifically the following LaTeX packages are used:
