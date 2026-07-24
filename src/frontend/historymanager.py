@@ -7,16 +7,14 @@ from .colorpalette import ColorPalette
 from ..backend import PathManager
 
 class _HistoryProtocol(Protocol):
-    panel_right_bottom: customtkinter.CTkFrame
+    history_list: customtkinter.CTkFrame
     root:               customtkinter.CTk
 
     latex_supported:    bool
     pathmanager:        PathManager
 
-    panel_right_bottom: customtkinter.CTkFrame
-
     color_palette: ColorPalette
-    history_buttons: List[customtkinter.CTkButton]
+    history_buttons: List[customtkinter.CTkFrame]
 
     _history: pd.DataFrame
 
@@ -41,6 +39,9 @@ class _HistoryProtocol(Protocol):
     def _update_history_panel(self) -> None:
         ...
 
+    def _remove_from_history(self, name: str) -> None:
+        ...
+
 class HistoryManagerMixin:
     """
     Mixin class to MathVecApp
@@ -55,17 +56,7 @@ class HistoryManagerMixin:
     For more information, see main class MathVecApp
     """
 
-    def manage_history(self: _HistoryProtocol):
-        row1 = customtkinter.CTkFrame(self.panel_right_bottom, fg_color = self.color_palette.frame)
-        row1.pack(fill="x", padx=2, pady=10)
-        customtkinter.CTkLabel(
-            row1,
-            text="HISTORY",
-            fg_color=self.color_palette.frame,
-            text_color=self.color_palette.text,
-            font=customtkinter.CTkFont(size=20, weight="bold")
-        ).pack(pady=10)         
-
+    def manage_history(self: _HistoryProtocol):   
         self._history = self._load_history()
         self._update_history_panel()
 
@@ -94,9 +85,9 @@ class HistoryManagerMixin:
     def _update_history_panel(self: _HistoryProtocol) -> None:
         num_expressions = len(self._history)
 
-        # Remove old buttons
-        for btn in self.history_buttons:
-            btn.destroy()
+        # Remove old rows
+        for row in self.history_buttons:
+            row.destroy()
 
         self.history_buttons.clear()
 
@@ -108,20 +99,55 @@ class HistoryManagerMixin:
             expression_name = str(self._history.loc[n, "name"])
             expression      = str(self._history.loc[n, "expression"])
 
-            btn_n = customtkinter.CTkButton(
-                self.panel_right_bottom,
+            # Row container
+            row = customtkinter.CTkFrame(
+                self.history_list,
+                fg_color=self.color_palette.frame
+            )
+
+            row.grid_columnconfigure(0, weight=1)
+
+            # Main history button
+            btn = customtkinter.CTkButton(
+                row,
                 text=f"{idx}. {expression_name}",
                 command=lambda nm=expression_name, expr=expression: self.insert_from_history(nm, expr),
                 fg_color=self.color_palette.frame,
-                hover_color=self.color_palette.frame_edge
+                hover_color=self.color_palette.frame_edge,
+                anchor="w"
             )
 
-            self.history_buttons.append(btn_n)
+            # Delete button
+            delete_btn = customtkinter.CTkButton(
+                row,
+                text="X",
+                width=25,
+                command=lambda nm=expression_name: self._remove_from_history(nm),
+                fg_color=self.color_palette.frame,
+                hover_color="red"
+            )
 
-        # Pack buttons
-        for btn in self.history_buttons:
-            btn.pack(
-                fill="y",
+            btn.grid(
+                row=0,
+                column=0,
+                sticky="ew",
+                padx=(2, 0),
+                pady=2
+            )
+
+            delete_btn.grid(
+                row=0,
+                column=1,
+                padx=(2, 2),
+                pady=2
+            )
+
+            self.history_buttons.append(row)
+
+        # Pack rows
+        for row in self.history_buttons:
+            row.pack(
+                fill="x",
                 padx=2,
                 pady=2
             )
