@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter
 from tkinter import messagebox
+from typing import Literal
 
 class PopUpManagerMixin:
     """
@@ -24,4 +25,10 @@ class PopUpManagerMixin:
         messagebox.showinfo("Saved", f'figure saved in\n{path}')
 
     def popup_path_adjusted(self, path: str):
-        messagebox.showinfo("Directory set", f'Directory changed to\n{path}')        
+        messagebox.showinfo("Directory set", f'Directory changed to\n{path}')
+
+    def popup_empty_field(self, field: Literal['Expression','Name'], func: Literal['VIEW','SAVE']):
+        messagebox.showwarning("Empty field", f"Empty '{field}' field: could not {func}.")
+
+    def pop_empty_expression_name(self, func: str):
+        messagebox.showwarning("Empty field", f"Empty 'Name' field: could not {func}.")

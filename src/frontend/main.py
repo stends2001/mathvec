@@ -143,14 +143,13 @@ class MathVecApp(
             return None
         
         try:
-            self._save_to_history(self.expression_name, self.expression_input)
             self.figure
-            plt.show()      
-            print(f'saving {self.expression_name, self.expression_input}')
+            plt.show()     
+            self._save_to_history(self.expression_name, self.expression_input)
             
         
-        except EmptyExpressionError as e:
-            print(e)
+        except EmptyExpressionError:
+            self.popup_empty_field('Expression','VIEW')
 
     def clear_history(self):
         self._clear_history()
@@ -179,17 +178,22 @@ class MathVecApp(
             self.popup_figure_saved(str(path))  
             self._save_to_history(self.expression_name, self.expression_input)
         
-        except (EmptyExpressionError,  EmtpyExpressionName) as e:
-            print(e)
+        except EmptyExpressionError:
+            self.popup_empty_field('Expression','SAVE')
+
+        except EmtpyExpressionName:
+            self.popup_empty_field('Name','SAVE')
 
     def set_output_dir(self):
         """interactively adjust output_dir"""
-        output_dir = Path(filedialog.askdirectory())
+        output_dir = filedialog.askdirectory()
 
         # if not filled in, will be default
         if output_dir == "":
             output_dir = self.pathmanager.output
-        
+        else:
+            output_dir = Path(output_dir)
+
         self.output_dir = output_dir
         self.popup_path_adjusted(str(self.output_dir))              
 
