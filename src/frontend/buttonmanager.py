@@ -61,32 +61,37 @@ class ButtonManagerMixin:
                                        width = int(0.975 * self.right_panel_width),
                                        command=self.reset, 
                                        fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)
+                                       hover_color= self.color_palette.button_hover,
+                                       text_color = self.color_palette.button_text)
 
         # button5: set directory
         btn5 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="SET dir", 
                                        command=self.set_output_dir, 
                                        fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)
+                                       hover_color= self.color_palette.button_hover,
+                                       text_color = self.color_palette.button_text)
 
         btn6 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="CLEAR HISTORY", 
                                        command=self.clear_history, 
                                        fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)      
+                                       hover_color= self.color_palette.button_hover,
+                                       text_color = self.color_palette.button_text)     
 
         btn7 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="CHANGE THEME", 
                                        command=self.change_theme, 
                                        fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)  
+                                       hover_color= self.color_palette.button_hover,
+                                       text_color = self.color_palette.button_text)  
 
         btn8 = customtkinter.CTkButton(self.panel_right_top, 
                                        text="EXIT", 
                                        command=self.quit_app, 
                                        fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover)      
+                                       hover_color= self.color_palette.button_hover,
+                                       text_color = self.color_palette.button_text)      
         
      
 
@@ -96,7 +101,7 @@ class ButtonManagerMixin:
                          command=self.view, 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
                          hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = 'white' if self.latex_supported else 'black'
+                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
                          )  
         
         btn3 = customtkinter.CTkButton(self.panel_right_top, 
@@ -104,7 +109,7 @@ class ButtonManagerMixin:
                          command= lambda ext = 'svg': self.save(ext), 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
                          hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = 'white' if self.latex_supported else 'black'
+                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
                          )   
 
         btn4 = customtkinter.CTkButton(self.panel_right_top, 
@@ -112,7 +117,7 @@ class ButtonManagerMixin:
                          command= lambda ext = 'png': self.save(ext), 
                          fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
                          hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = 'white' if self.latex_supported else 'black'
+                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
                          )              
 
         for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8]):

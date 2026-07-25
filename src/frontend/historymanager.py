@@ -125,7 +125,8 @@ class HistoryManagerMixin:
                 text=button_text,
                 command=lambda nm=expression_name, expr=expression: self.insert_from_history(nm, expr),
                 fg_color=self.color_palette.frame,
-                hover_color=self.color_palette.frame_edge,
+                hover_color=self.color_palette.history_entry_hover,
+                text_color = self.color_palette.history_text,
                 anchor="w"
             )
 
@@ -136,7 +137,8 @@ class HistoryManagerMixin:
                 width=25,
                 command=lambda nm=expression_name: self._remove_from_history(nm),
                 fg_color=self.color_palette.frame,
-                hover_color="red"
+                hover_color=self.color_palette.history_entry_remove,
+                text_color = self.color_palette.history_text,                
             )
 
             btn.grid(

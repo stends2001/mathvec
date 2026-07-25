@@ -3,9 +3,9 @@ from dataclasses import dataclass
 @dataclass 
 class ColorPalette:
   frame:            str
-  frame_edge:       str
-
   text:             str
+  button_text:      str
+  button_text_unvavail: str
   input_edge:       str
   
   button:           str
@@ -14,3 +14,7 @@ class ColorPalette:
   
   canvas_bg:        str
   scrollbar:        str
+
+  history_text:   str
+  history_entry_hover:  str   
+  history_entry_remove:  str  

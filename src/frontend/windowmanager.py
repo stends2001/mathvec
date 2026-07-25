@@ -87,12 +87,12 @@ class WindowManagerMixin:
         self.panel_left.grid_rowconfigure(0, weight=1)
         self.panel_left.grid_rowconfigure(1, weight=8)
         self.panel_left.grid_columnconfigure(0, weight=1)
-        self.panel_right.grid_propagate(True)        
+        self.panel_left.grid_propagate(True)        
 
         self.panel_left_top = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame)
         self.panel_left_top.grid(row=0, column=0, sticky="nsew")
         self.panel_left_top.grid_rowconfigure(0, weight=0)  # name row
-        self.panel_left_top.grid_rowconfigure(1, weight=1)  # expression row        
+        self.panel_left_top.grid_rowconfigure(1, weight=0)  # expression row        
 
         # left_bottom: canvas panel
         self.panel_left_bottom = customtkinter.CTkFrame(self.panel_left, fg_color=self.color_palette.frame)
@@ -268,7 +268,7 @@ class WindowManagerMixin:
 
 
     def _fill_canvas_plane(self):
-        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.frame, highlightthickness=0)   # kills the default border
+        self.canvas_plane = customtkinter.CTkCanvas(self.panel_left_bottom, bg=self.color_palette.canvas_bg, highlightthickness=0)   # kills the default border
         self.canvas_plane.pack(fill="both", expand=True)      
 
 
