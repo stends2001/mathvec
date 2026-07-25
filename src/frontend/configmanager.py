@@ -21,30 +21,33 @@ class ConfigManagerMixin:
     """
     root:           customtkinter.CTk
     pathmanager:    'PathManager'
+    config:         dict[str, Any] | None
 
     def set_config(self):
-        config                  = self._load_config()
 
-        self.title              = config['title']
+        if self.config is None:
+            self.config             = self._load_config()
 
-        self.window_height      = config['window_height']     
-        self.window_width       = config['window_width']      
-        self.right_panel_width  = config['right_panel_width'] 
+        self.title              = self.config['title']
 
-        self.textbox_width      = config['textbox_width']     
-        self.textbox_height     = config['textbox_height']            
+        self.window_height      = self.config['window_height']     
+        self.window_width       = self.config['window_width']      
+        self.right_panel_width  = self.config['right_panel_width'] 
 
-        self.canvas_width       = config['canvas_width']      
-        self.canvas_height      = config['canvas_height']     
-        self.canvas_textsize_min= config['canvas_textsize_min']   
-        self.canvas_textsize_max= config['canvas_textsize_max']           
+        self.textbox_width      = self.config['textbox_width']     
+        self.textbox_height     = self.config['textbox_height']            
 
-        self.figure_height      = config['figure_height']     
-        self.figure_width       = config['figure_width']      
-        self.figure_dpi         = config['figure_dpi']              
-        self.figure_textsize    = config['figure_textsize']   
+        self.canvas_width       = self.config['canvas_width']      
+        self.canvas_height      = self.config['canvas_height']     
+        self.canvas_textsize_min= self.config['canvas_textsize_min']   
+        self.canvas_textsize_max= self.config['canvas_textsize_max']           
 
-        self.theme              = config['theme']
+        self.figure_height      = self.config['figure_height']     
+        self.figure_width       = self.config['figure_width']      
+        self.figure_dpi         = self.config['figure_dpi']              
+        self.figure_textsize    = self.config['figure_textsize']   
+
+        self.theme              = self.config['theme']
 
         theme_vars              = self._load_theme_colors()
         self.color_palette      = ColorPalette(**theme_vars[self.theme])

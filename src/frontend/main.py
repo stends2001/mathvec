@@ -1,5 +1,5 @@
 import tkinter as tk
-from typing import Optional, Literal, Dict, List
+from typing import Optional, Literal, Dict, List, Any
 from tkinter import filedialog
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -58,17 +58,19 @@ class MathVecApp(
     _figure:        Figure | None
     _canvas:        ImageTk.PhotoImage | None
     _history:       pd.DataFrame
+    config:        dict[str, Any] | None
 
     color_palette:  ColorPalette
     latex_supported: bool
     max_history_entries: int = 1000
     
     def __init__(self):
-
+        self.config    = None
         self.pathmanager= PathManager()
         self._validate_latex()
         self.set_config()     
 
+        
         self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
         
         self.default_input: str = ''
@@ -122,7 +124,18 @@ class MathVecApp(
         self.root.destroy()
 
     def change_theme(self):
-        print('To be implemented')
+        assert self.config is not None
+
+        if self.config['theme'] == 'light_mode':
+            self.config['theme'] = 'dark_mode'
+
+        elif self.config['theme'] == 'dark_mode':
+            self.config['theme'] = 'light_mode'
+
+        self.set_config() 
+        self.configure_panels()   
+        self.manage_buttons()     
+        self.manage_history()
 
     def reset(self):
         """reset everything, with the exception of the output directory"""
