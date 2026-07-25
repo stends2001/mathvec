@@ -6,6 +6,5 @@ __pycache__/
 *$py.class
 *.egg-info/
 build/
-requirements.txt
 textput.aux
 textput.log

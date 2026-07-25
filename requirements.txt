@@ -1,5 +1,0 @@
-customtkinter==6.0.0
-matplotlib==3.11.1
-pandas==3.0.3
-Pillow==12.3.0
-PyYAML==6.0.3
