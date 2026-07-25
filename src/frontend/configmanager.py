@@ -36,7 +36,8 @@ class ConfigManagerMixin:
 
         self.canvas_width       = config['canvas_width']      
         self.canvas_height      = config['canvas_height']     
-        self.canvas_textsize    = config['canvas_textsize']   
+        self.canvas_textsize_min= config['canvas_textsize_min']   
+        self.canvas_textsize_max= config['canvas_textsize_max']           
 
         self.figure_height      = config['figure_height']     
         self.figure_width       = config['figure_width']      

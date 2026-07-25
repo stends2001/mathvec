@@ -22,7 +22,8 @@ class _FigureProtocol(Protocol):
 
     canvas_width:   int 
     canvas_height:  int
-    canvas_textsize:int
+    canvas_textsize_min: int
+    canvas_textsize_max: int    
 
     _figure:        Figure | None
     _canvas:        ImageTk.PhotoImage | None
@@ -106,7 +107,7 @@ class FigureManager:
         ax.text(
             0.5, 0.5,
             f"${expression_latex}$",
-            fontsize=self.figure_textsize,
+            fontsize=12,
             ha="center",
             va="center",
         )
@@ -145,15 +146,15 @@ class FigureManager:
 
         try:
             parser.parse(f"${self.expression_input}$")
-            text = f"${self.expression_input}$"
+            txt = f"${self.expression_input}$"
         except ValueError:
-            text = self.expression_input
+            txt = self.expression_input
 
         ax.text(
             0.05,
             0.5,
-            text,
-            fontsize=self.canvas_textsize,
+            txt,
+            fontsize=self._get_fontsize(txt),
             va="center",
             color=self.color_palette.text
         )
@@ -179,3 +180,17 @@ class FigureManager:
         )
 
         self._toggle_usetex('on')
+
+    def _get_fontsize(self: _FigureProtocol, text: str) ->  float:
+        if len(text) == 0:
+            return self.canvas_textsize_max
+        
+        max_chars = max([len(line) for line in text.splitlines()])
+        num_lines = len(text.splitlines())
+
+        suggested_fontsize =  min(
+             self.canvas_plane.winfo_height() / (num_lines * 10),
+             self.canvas_plane.winfo_width() / (max_chars * 2.5)
+        )
+
+        return max(self.canvas_textsize_min, min(suggested_fontsize, self.canvas_textsize_max))

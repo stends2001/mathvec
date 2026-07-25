@@ -9,7 +9,8 @@ textbox_height:     10
 
 canvas_width:       500
 canvas_height:      150
-canvas_textsize:    12
+canvas_textsize_min: 6
+canvas_textsize_max: 18
 
 figure_height:      1
 figure_width:       3
