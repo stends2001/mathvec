@@ -29,6 +29,3 @@ class PopUpManagerMixin:
 
     def popup_empty_field(self, field: Literal['Expression','Name'], func: Literal['VIEW','SAVE']):
         messagebox.showwarning("Empty field", f"Empty '{field}' field: could not {func}.")
-
-    def pop_empty_expression_name(self, func: str):
-        messagebox.showwarning("Empty field", f"Empty 'Name' field: could not {func}.")
