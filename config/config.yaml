@@ -1,8 +1,7 @@
 title:            'MATHVEC'
 
-window_height:      700
-window_width:       1000
-window_y_offset:    20
+window_height:       0.8
+window_width:        0.4
 right_panel_width:  200
 
 textbox_width:      50

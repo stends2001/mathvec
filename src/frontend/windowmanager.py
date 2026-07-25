@@ -27,10 +27,9 @@ class WindowManagerMixin:
 
     window_width:       int
     window_height:      int
-    window_y_offset:    int
 
-    textbox_width:      int 
-    textbox_height:     int
+    textbox_width:      float 
+    textbox_height:     float
 
     canvas_width:       int 
     canvas_height:      int
@@ -43,11 +42,17 @@ class WindowManagerMixin:
         screen_width    = self.root.winfo_screenwidth()
         screen_height   = self.root.winfo_screenheight()        
 
-        center_x = int(screen_width / 2 - self.window_width /2)
-        center_y = int(screen_height/2 - self.window_height / 2 - self.window_y_offset)
+        window_width    = int(screen_width * self.window_width)
+        window_height   = int(screen_height * self.window_height)
+
+        # center X and Y
+        pos_x = (screen_width - window_width + window_width//3)
+        pos_y = (screen_height - window_height) // 2
 
         # set the position of the window to the center of the screen
-        self.root.geometry(f'{self.window_width}x{self.window_height}+{center_x}+{center_y}')    
+        self.root.geometry(
+            f"{window_width}x{window_height}+{pos_x}+{pos_y}"
+        )  
         self.root.resizable(True, True)         
         self.root.iconbitmap(self.pathmanager.assets / 'logo.ico') # type: ignore
 

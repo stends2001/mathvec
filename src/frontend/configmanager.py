@@ -29,7 +29,6 @@ class ConfigManagerMixin:
 
         self.window_height      = config['window_height']     
         self.window_width       = config['window_width']      
-        self.window_y_offset    = config['window_y_offset']   
         self.right_panel_width  = config['right_panel_width'] 
 
         self.textbox_width      = config['textbox_width']     
