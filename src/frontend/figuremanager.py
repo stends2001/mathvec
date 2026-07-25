@@ -119,27 +119,35 @@ class FigureManager:
         self._figure = fig
         return fig
 
-    def _draw_canvas(self: _FigureProtocol) ->  ImageTk.PhotoImage:
+    def _draw_canvas(self: _FigureProtocol) -> ImageTk.PhotoImage:
         """
         Draw canvas: that is, an image of previewing matplotlib math.
         """
-        input_text = self.expression_input
-        
-        fig     = Figure(figsize=(self.figure_width, self.figure_height), 
-                         dpi=self.figure_dpi,
-                        facecolor=self.color_palette.canvas_bg)
-        
-        ax: Axes= fig.add_axes([0, 0, 1, 1]) # type: ignore
+
+        self.canvas_plane.update_idletasks()
+
+        width = self.canvas_plane.winfo_width()
+        height = self.canvas_plane.winfo_height()
+
+        dpi = self.figure_dpi
+
+        fig = Figure(
+            figsize=(width / dpi, height / dpi),
+            dpi=dpi,
+            facecolor=self.color_palette.canvas_bg
+        )
+
+        ax: Axes = fig.add_axes([0, 0, 1, 1])  # type: ignore
         ax.axis("off")
         ax.set_facecolor(self.color_palette.canvas_bg)
 
         parser = MathTextParser("agg")
 
         try:
-            parser.parse(f"${input_text}$")
-            text = f"${input_text}$"
+            parser.parse(f"${self.expression_input}$")
+            text = f"${self.expression_input}$"
         except ValueError:
-            text = input_text
+            text = self.expression_input
 
         ax.text(
             0.05,
@@ -150,7 +158,6 @@ class FigureManager:
             color=self.color_palette.text
         )
 
-
         buf = BytesIO()
         FigureCanvasAgg(fig).print_png(buf)
 
@@ -158,7 +165,6 @@ class FigureManager:
         img = Image.open(buf)
 
         return ImageTk.PhotoImage(img)
-
     def _update_canvas(self: _FigureProtocol) -> None:
         """update canvas plane with a canvas"""
         
