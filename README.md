@@ -5,6 +5,9 @@ You can run it by running `runapp.py` in the project root.
 
 ## TODO
 - tests
+- ISSUES
+    - view doesnt function well after having cleared history I believe
+    - theme - adjustment doesn't work
 
 ## Requirements
 Python 3.10+, tkinter (usually a standard library), and a LaTeX distribution (e.g. TeX Live or MiKTeX) available on your PATH. Also note, specifically the following LaTeX packages are used:
