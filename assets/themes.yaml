@@ -1,6 +1,6 @@
 light_mode:
   frame:                "#F3F3F3"   # black1 => main background
-  text:                 "#1E1E1E"   # white1 => text
+  text:                 "#1E1E1E"   # black => text
   button_text:          "black"
   button_text_unvavail: "black"
   input_edge:           "#CE9178"   # orange1=> input edge

@@ -55,10 +55,10 @@ class MathVecApp(
     - FigureManager
     - SaveManagerMixin
     """
-    _figure:        Figure | None
-    _canvas:        ImageTk.PhotoImage | None
+    _figure:        Figure | None               = None 
+    _canvas:        ImageTk.PhotoImage | None   = None
     _history:       pd.DataFrame
-    config:        dict[str, Any] | None
+    config:        dict[str, Any] | None        = None
 
     color_palette:  ColorPalette
     latex_supported: bool
@@ -68,28 +68,26 @@ class MathVecApp(
         self.config    = None
         self.pathmanager= PathManager()
         self._validate_latex()
-        self.set_config()     
 
-        
-        self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
-        
         self.default_input: str = ''
         self.default_name:  str = 'equation_1'
-        self.output_dir:    Path= self.pathmanager.output
+        self.output_dir:    Path= self.pathmanager.output        
+        self.history_buttons: List[customtkinter.CTkFrame] = []  
 
-        self.history_buttons: List[customtkinter.CTkFrame] = []
-                  
+        self._initialize_program()      
+
+    def _initialize_program(self) -> None:
+
+        self.set_config()     
+        self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
+  
         self.configure_panels()   
-        self.manage_buttons()     
+        self.manage_buttons()      
         self.manage_history()
         self.reset()
-
         def _on_change():
             self._figure = None
             self._update_canvas()
-
-            print(f'Text now is: {len(self.expression_input)} chars long over {len(self.expression_input.splitlines())} lines.')
-
         self.entry.bind("<KeyRelease>",  lambda e: _on_change())
         self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
 
@@ -132,15 +130,13 @@ class MathVecApp(
         elif self.config['theme'] == 'dark_mode':
             self.config['theme'] = 'light_mode'
 
-        self.set_config() 
-        self.configure_panels()   
-        self.manage_buttons()     
-        self.manage_history()
+        self._initialize_program()
 
     def reset(self):
         """reset everything, with the exception of the output directory"""
         self._figure = None
         self._canvas = None
+
         self.entry.delete("1.0", "end")
         self.entry.insert("1.0", self.default_input)
 
