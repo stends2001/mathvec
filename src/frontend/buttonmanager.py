@@ -1,21 +1,55 @@
 import tkinter as tk
 import customtkinter
-from typing import Literal, Protocol
+from typing import Literal, Protocol,TypedDict
+
 from .colorpalette import ColorPalette
+
+class ButtonStyleKwargs(TypedDict):
+    text: str
+    width: int
+    fg_color: str
+    hover_color: str
+    text_color: str
+
+
+def get_buttonstyle(latex_status: bool | None, text: str, colorpalette: ColorPalette, width: int) -> ButtonStyleKwargs:
+    """
+    
+    when latex_status is None, it'll be the same as when latex_status is True
+
+    """
+    if latex_status is False:
+        text        = f"❌ {text}"
+        fg_color    = colorpalette.button_unavail
+        hover_color = colorpalette.button_unavail
+        text_color  = colorpalette.button_text_unvavail
+
+    else:
+        text        = text 
+        fg_color    = colorpalette.button 
+        hover_color = colorpalette.button_hover
+        text_color  = colorpalette.button_text        
+
+    return { 
+        "text"          : text,
+        "width"         : width,
+        "fg_color"      : fg_color,
+        "hover_color"   : hover_color,
+        "text_color"    : text_color
+    }
 
 class _ButtonProtocol(Protocol):
     """
     Protocol that lists methods in MathVecApp, 
     as fallback for ButtonManagerMixin
     """
-    panel_right_top:    customtkinter.CTkFrame
+    latex_supported:    bool
+
     root:               customtkinter.CTk
+    panel_right_top:    customtkinter.CTkFrame
+    right_panel_width:  int   
 
-    latex_supported:    bool
-    latex_supported:    bool
-
-    color_palette: ColorPalette
-    right_panel_width:  int
+    color_palette:      ColorPalette
 
     def reset(self) -> None:
         ...
@@ -53,74 +87,57 @@ class ButtonManagerMixin:
     """
     def manage_buttons(self: _ButtonProtocol):
 
-        # BUTTONS - INDEPENDENT ON LATEX
+        # ===== BUTTONS - INDEPENDENT OF LATEX STATUS ===== #
+
+        button_width = int(0.975 * self.right_panel_width)
 
         # button1: clear
         btn1 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="CLEAR", 
-                                       width = int(0.975 * self.right_panel_width),
                                        command=self.reset, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover,
-                                       text_color = self.color_palette.button_text)
+                                       **get_buttonstyle(None, 'CLEAR', self.color_palette, button_width)
+                                       )
 
         # button5: set directory
         btn5 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="SET dir", 
                                        command=self.set_output_dir, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover,
-                                       text_color = self.color_palette.button_text)
+                                       **get_buttonstyle(None, 'SET DIR', self.color_palette, button_width)
+                                       )
 
         btn6 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="CLEAR HISTORY", 
                                        command=self.clear_history, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover,
-                                       text_color = self.color_palette.button_text)     
+                                       **get_buttonstyle(None, 'CLEAR HISTORY', self.color_palette, button_width)
+                                       )     
 
         btn7 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="CHANGE THEME", 
                                        command=self.change_theme, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover,
-                                       text_color = self.color_palette.button_text)  
+                                       **get_buttonstyle(None, 'SWITCH THEME', self.color_palette, button_width)
+                                       )  
 
-        btn8 = customtkinter.CTkButton(self.panel_right_top, 
-                                       text="EXIT", 
+        btn8 = customtkinter.CTkButton(self.panel_right_top,
                                        command=self.quit_app, 
-                                       fg_color = self.color_palette.button, 
-                                       hover_color= self.color_palette.button_hover,
-                                       text_color = self.color_palette.button_text)      
+                                       **get_buttonstyle(None, 'EXIT', self.color_palette, button_width)
+                                       )      
         
      
-
         # button2: view expression
         btn2 = customtkinter.CTkButton(self.panel_right_top, 
-                         text='VIEW' if self.latex_supported else '❌VIEW', 
-                         command=self.view, 
-                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
-                         )  
-        
+                                       command=self.view, 
+                                       **get_buttonstyle(self.latex_supported, 'VIEW', self.color_palette, button_width)
+                                       )  
+          
         btn3 = customtkinter.CTkButton(self.panel_right_top, 
-                         text='SAVE .svg' if self.latex_supported else '❌SAVE .svg', 
-                         command= lambda ext = 'svg': self.save(ext), 
-                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
-                         )   
-
+                                       command= lambda ext = 'svg': self.save(ext), 
+                                       **get_buttonstyle(self.latex_supported, 'SAVE .svg', self.color_palette, button_width)
+                                       )  
+            
         btn4 = customtkinter.CTkButton(self.panel_right_top, 
-                         text='SAVE .png' if self.latex_supported else '❌SAVE .png', 
-                         command= lambda ext = 'png': self.save(ext), 
-                         fg_color = self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         hover_color= self.color_palette.button if self.latex_supported else self.color_palette.button_unavail,
-                         text_color = self.color_palette.button_text if self.latex_supported else self.color_palette.button_text_unvavail
-                         )              
+                                       command= lambda ext = 'png': self.save(ext), 
+                                       **get_buttonstyle(self.latex_supported, 'SAVE .png', self.color_palette, button_width)
+                                       )  
 
-        for row, btn in enumerate([btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8]):
+        buttons = [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8]
+
+        for row, btn in enumerate(buttons):
       
             btn.grid(
                     row=row,

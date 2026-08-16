@@ -1,1 +1,1 @@
-from .main import MathVecApp
+from .core import MathVecApp
