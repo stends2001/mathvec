@@ -13,22 +13,26 @@ from ..exceptions import EmptyExpressionError
 from .colorpalette import ColorPalette
 
 class _FigureProtocol(Protocol):
-    canvas_plane:   customtkinter.CTkCanvas
+    """
+    Protocol that lists methods in ``MathVecApp``
+    as fallback for ``FigureManager``.
+    """    
+    canvas_plane : customtkinter.CTkCanvas
 
-    figure_height:  int 
-    figure_width:   int 
-    figure_dpi:     int
-    figure_textsize:int
+    figure_height : int 
+    figure_width : int 
+    figure_dpi : int
+    figure_textsize : int
 
-    canvas_width:   int 
-    canvas_height:  int
-    canvas_textsize_min: int
-    canvas_textsize_max: int    
+    canvas_width : int 
+    canvas_height : int
+    canvas_textsize_min : int
+    canvas_textsize_max : int    
 
-    _figure:        Figure | None
-    _canvas:        ImageTk.PhotoImage | None
+    _figure : Figure | None
+    _canvas : ImageTk.PhotoImage | None
     
-    color_palette: ColorPalette    
+    color_palette : ColorPalette    
 
     @property 
     def expression_input(self) -> str:
@@ -52,22 +56,27 @@ class _FigureProtocol(Protocol):
 
 class FigureManager:
     """
-    Mixin class to MathVecApp
-    Manages figures
-
-    The necessary properties that live on the main class need
-    to be defined here by stubs.
+    Mixin class to ``MathVecApp`` that manages figures.
+    The canvas represents the preview figure below the input,
+    and the figure the pane that opens up alongside of the app.
 
     Methods
     -------
-    - `_toggle_usetex()`
-    - `_draw_figure()`
-    - `_draw_canvas()`
-    - `_update_canvas()`
+    ``_toggle_usetex()``
+        Turn on or off usetex matplotlib.
+    ``_draw_figure()``
+        Draw the figure.
+    ``_draw_canvas()``
+    ``_update_canvas()``
+
+    Attributes
+    ----------
+    ``figure``
+        The figure created.
 
     See Also
     --------
-    For more information, see main class MathVecApp
+    For more information, see main class ``MathVecApp``.
     """
 
     @property
@@ -92,7 +101,7 @@ class FigureManager:
     def _draw_figure(self: _FigureProtocol) -> Figure:
         """
         Draw figure: that is, an image of proper latex code. 
-        To be viewed or saved. Both returned, and stored in `self._figure`
+        Both returned, and stored in `self._figure`
         """
         if self.expression_input == '':
             raise EmptyExpressionError('VIEW')
