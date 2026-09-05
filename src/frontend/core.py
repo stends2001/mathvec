@@ -32,28 +32,38 @@ class MathVecApp(
     ):
     
     """
-    Main backend class that orchestrates the running of the app by using Mixin classes
-
-    Parameters
-    ----------
-    None
+    Main backend class that orchestrates the running of the app by using Mixin classes.
+    Expression input is saved at ``expression_input`` and the equation name in 
+    ``expression_name``.
 
     Methods 
     -------
-    - `run_app()`
-    - `reset()`
-    - `save()`
-    - `set_output_dir()`
-    - `expression_input`
-    - `expression_name`
+    ``run_app()``
+        Main application running function.
+    ``reset()``
+        Resets application.
+    ``save()``
+        Save equation.
+    ``set_output_dir()``
+        Set directory in which to save equations.
 
-    Mixins
-    ------
-    - ConfigManagerMixin
-    - WindowManagerMixin
-    - ButtonManagerMixin
-    - FigureManager
-    - SaveManagerMixin
+    See Also
+    --------
+    ``ConfigManagerMixin``
+        Mixin class that deals with the management of config.
+    ``WindowManagerMixin``
+        Mixin class that deals with the setup of windows and panes.
+    ``ButtonManagerMixin``
+        Mixin class that deals with the management of buttons.
+    ``FigureManager``
+        Mixin class that deals with figure creation.
+    ``SaveManagerMixin``
+        Mixin class that deals with the saving of equations.
+
+    Downstream
+    ----------
+    ``MathVecApp`` is the main class in the application. This connects frontend with
+    backend and with configuration.
     """
     _figure:        Figure | None               = None 
     _canvas:        ImageTk.PhotoImage | None   = None
@@ -120,6 +130,7 @@ class MathVecApp(
         self.root.mainloop()
 
     def quit_app(self):
+        """Exit application."""
         self._save_history()
         self.root.destroy()
 
@@ -177,15 +188,16 @@ class MathVecApp(
             plt.show()     
             self._save_to_history(self.expression_name, self.expression_input)
             
-        
         except EmptyExpressionError:
             self.popup_empty_field('Expression','VIEW')
 
     def clear_history(self):
+        """Remove all history."""
         self._clear_history()
         self._update_history_panel()
 
     def insert_from_history(self, name: str, expression_name: str):
+        """Load expression from history into input panels."""
         self.reset()
         self.entry.delete("1.0", "end")
         self.entry.insert("1.0", expression_name)
@@ -195,11 +207,12 @@ class MathVecApp(
         self._update_history_panel()
 
     def _remove_from_history(self, name: str):
+        """Remove expression from history."""
         self._history = self._history[self._history['name'] != name].reset_index(drop=True)
         self._update_history_panel()        
 
     def save(self, extension: Literal['svg','png']) -> None:
-        """save expression"""
+        """save expression."""
         if not self.latex_supported:
             self.popup_button_unavailable('SAVE')
             return None
