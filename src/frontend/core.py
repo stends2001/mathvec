@@ -74,22 +74,24 @@ class MathVecApp(
         self.output_dir:    Path= self.pathmanager.output        
         self.history_buttons: List[customtkinter.CTkFrame] = []  
 
-        self._initialize_program()      
+        self._initialize_program()
 
-    def _initialize_program(self) -> None:
-
-        self.set_config()     
-        self.root       = customtkinter.CTk(fg_color=self.color_palette.frame)
-  
-        self.configure_panels()   
-        self.manage_buttons()      
-        self.manage_history()
-        self.reset()
+    def _bind_events(self) -> None:
         def _on_change():
             self._figure = None
             self._update_canvas()
         self.entry.bind("<KeyRelease>",  lambda e: _on_change())
-        self.naming.bind("<KeyRelease>", lambda e: _on_change())  # name changes affect save filename too           
+        self.naming.bind("<KeyRelease>", lambda e: _on_change())
+
+    def _initialize_program(self) -> None:
+        """first-time setup — only ever called once, from __init__"""
+        self.set_config()     
+        self.root = customtkinter.CTk(fg_color=self.color_palette.frame)
+        self.configure_panels()   
+        self.manage_buttons()      
+        self.manage_history()      # loads from disk — correct on startup
+        self.reset()                # sets defaults — correct on startup
+        self._bind_events()
 
     def _validate_latex(self):
 
@@ -122,15 +124,34 @@ class MathVecApp(
         self.root.destroy()
 
     def change_theme(self):
+        """rebuild the UI in-place with the new palette, preserving session state"""
         assert self.config is not None
+        self.config['theme'] = 'dark_mode' if self.config['theme'] == 'light_mode' else 'light_mode'
 
-        if self.config['theme'] == 'light_mode':
-            self.config['theme'] = 'dark_mode'
+        # snapshot current session state
+        saved_input = self.expression_input
+        saved_name  = self.naming.get()
 
-        elif self.config['theme'] == 'dark_mode':
-            self.config['theme'] = 'light_mode'
+        # tear down widgets on the SAME root — no new Tk() instance
+        for widget in self.root.winfo_children():
+            widget.destroy()
 
-        self._initialize_program()
+        self.set_config()
+        self.root.configure(fg_color=self.color_palette.frame)
+
+        self.configure_panels()
+        self.manage_buttons()
+
+        # rebuild history rows from the in-memory dataframe — don't touch disk
+        self._update_history_panel()
+
+        self.entry.delete("1.0", "end")
+        self.entry.insert("1.0", saved_input)
+        self.naming.delete(0, "end")
+        self.naming.insert(0, saved_name)
+        self._update_canvas()
+
+        self._bind_events()
 
     def reset(self):
         """reset everything, with the exception of the output directory"""
