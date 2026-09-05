@@ -7,15 +7,19 @@ from .colorpalette import ColorPalette
 from ..backend import PathManager
 
 class _HistoryProtocol(Protocol):
-    history_list:       customtkinter.CTkScrollableFrame
-    root:               customtkinter.CTk
+    """
+    Protocol that lists methods in ``MathVecApp``
+    as fallback for ``HistoryManagerMixin``.
+    """     
+    history_list : customtkinter.CTkScrollableFrame
+    root : customtkinter.CTk
 
-    latex_supported:    bool
-    pathmanager:        PathManager
+    latex_supported : bool
+    pathmanager : PathManager
 
-    color_palette: ColorPalette
-    history_buttons: List[customtkinter.CTkFrame]
-    max_history_entries: int
+    color_palette : ColorPalette
+    history_buttons : List[customtkinter.CTkFrame]
+    max_history_entries : int
 
     _history: pd.DataFrame
 
@@ -45,24 +49,35 @@ class _HistoryProtocol(Protocol):
 
 class HistoryManagerMixin:
     """
-    Mixin class to MathVecApp
-    Manages buttons
+    Mixin class to ``MathVecApp`` that manages history.
 
-    As the source code lives in other mixins, or on the main class,
-    the buttons here call to stubs. The method with proper 
-    functionality live on the main class.
-
+    Methods
+    ------
+    ``manage_history()``
+        Initiate history: load from file, and update the panel.
+    ``_save_to_history()``
+        Save an expression to the history.
+    ``_save_history()``
+        Save history to file.
+    ``_load_history()``
+        Load history from file.
+    ``_clear_history()``
+        Clear history.
+    ``_update_history_panel()``
+        Update history panel below the buttons.
+        
     See Also
     --------
     For more information, see main class MathVecApp
     """
 
     def manage_history(self: _HistoryProtocol):   
+        """Initiate history: load from file, and update the panel."""
         self._history = self._load_history()
         self._update_history_panel()
 
     def _save_to_history(self: _HistoryProtocol, name: str, expression: str):
-
+        """Save an expression to the history."""
         # if name is already present, remove
         if name in self._history['name'].unique():
             self._remove_from_history(name)
@@ -71,11 +86,13 @@ class HistoryManagerMixin:
         self._update_history_panel()
 
     def _save_history(self: _HistoryProtocol) -> None:
+        """Save history to file. File is taken from ``PathManager``."""        
         filepath = self.pathmanager.history
 
         self._history.reset_index(drop = True).to_csv(filepath, sep = "\t", index = False)
 
     def _load_history(self: _HistoryProtocol) -> pd.DataFrame:
+        """Load history from file. File is taken from ``PathManager``."""      
         filepath = self.pathmanager.history
         if filepath.exists():
            return pd.read_csv(filepath, delimiter="\t")
@@ -83,12 +100,14 @@ class HistoryManagerMixin:
             return pd.DataFrame(columns=["name", "expression"])
         
     def _clear_history(self: _HistoryProtocol) -> None:
+        """Clear history: remove existent file and attached data frame."""
         self._history = pd.DataFrame(columns=["name", "expression"])
         filepath = self.pathmanager.history
         if filepath.exists():
             filepath.unlink()
 
     def _update_history_panel(self: _HistoryProtocol) -> None:
+        """Update history panel based on history data frame."""
         num_expressions = len(self._history)
 
         # Remove old rows
