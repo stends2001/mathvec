@@ -5,6 +5,7 @@ from typing import Literal, Protocol,TypedDict
 from .colorpalette import ColorPalette
 
 class ButtonStyleKwargs(TypedDict):
+    """Simple TypedDict for Button - arguments"""
     text: str
     width: int
     fg_color: str
@@ -12,11 +13,29 @@ class ButtonStyleKwargs(TypedDict):
     text_color: str
 
 
-def get_buttonstyle(latex_status: bool | None, text: str, colorpalette: ColorPalette, width: int) -> ButtonStyleKwargs:
+def get_buttonstyle(latex_status : bool | None, 
+                    text : str, 
+                    colorpalette : ColorPalette, 
+                    width : int) -> ButtonStyleKwargs:
     """
-    
-    when latex_status is None, it'll be the same as when latex_status is True
+    Get an instance of ``buttonstyle`` depending on configuration.
 
+    Parameters
+    ----------
+    latex_status : bool | None
+        Whether ``latex_supported`` is True or False. When this is not applicable to the button,
+        use None.
+    text : str
+        Button label.
+    colorpalette : ColorPalette
+        The theme of the application.
+    width : int
+        The width of buttons in the application.
+
+    Returns
+    -------
+    ``ButtonStyleKwargs``
+        Simple TypedDict for Button - arguments        
     """
     if latex_status is False:
         text        = f"❌ {text}"
@@ -43,13 +62,12 @@ class _ButtonProtocol(Protocol):
     Protocol that lists methods in MathVecApp, 
     as fallback for ButtonManagerMixin
     """
-    latex_supported:    bool
+    latex_supported : bool
 
-    root:               customtkinter.CTk
-    panel_right_top:    customtkinter.CTkFrame
-    right_panel_width:  int   
-
-    color_palette:      ColorPalette
+    root : customtkinter.CTk
+    panel_right_top : customtkinter.CTkFrame
+    right_panel_width : int   
+    color_palette : ColorPalette
 
     def reset(self) -> None:
         ...
@@ -74,18 +92,18 @@ class _ButtonProtocol(Protocol):
 
 class ButtonManagerMixin:
     """
-    Mixin class to MathVecApp
-    Manages buttons
-
-    As the source code lives in other mixins, or on the main class,
-    the buttons here call to stubs. The method with proper 
-    functionality live on the main class.
+    Mixin class to ``MathVecApp`` that manages buttons.
 
     See Also
     --------
-    For more information, see main class MathVecApp
+    For more information, see main class ``MathVecApp``.
     """
     def manage_buttons(self: _ButtonProtocol):
+        """
+        Main function to ``ButtonManagerMixin. Sets the button grid.
+        Note that the buttons are linked to ``self.right_panel_top``, 
+        which is linked in the declaration of each button.
+        """
 
         # ===== BUTTONS - INDEPENDENT OF LATEX STATUS ===== #
 
