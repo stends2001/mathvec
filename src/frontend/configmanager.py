@@ -1,7 +1,8 @@
+from __future__ import annotations
 import tkinter as tk
 import customtkinter
 import yaml
-from typing import Dict, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from .colorpalette import ColorPalette
 
 if TYPE_CHECKING:
@@ -9,22 +10,21 @@ if TYPE_CHECKING:
 
 class ConfigManagerMixin:
     """
-    Mixin class to MathVecApp
-    Manages config
+    Mixin class to ``MathVecApp`` that manages config.
 
-    Sets attributes from .yaml file, path to which 
-    is extracted from self.pathmanager.config
+    Sets attributes from ``config/config.yaml``. Path 
+    is extracted from ``PathManager``.
 
     See Also
     --------
-    For more information, see main class MathVecApp
+    For more information, see main class ``MathVecApp``.
     """
-    root:           customtkinter.CTk
-    pathmanager:    'PathManager'
-    config:         dict[str, Any] | None
+    root : customtkinter.CTk
+    pathmanager : PathManager
+    config : dict[str, Any] | None
 
     def set_config(self):
-
+        """set configuration object (``config``) based on configuration file."""
         if self.config is None:
             self.config             = self._load_config()
 
@@ -52,14 +52,14 @@ class ConfigManagerMixin:
         theme_vars              = self._load_theme_colors()
         self.color_palette      = ColorPalette(**theme_vars[self.theme])
 
-    def _load_config(self) -> Dict[str, Any]:
+    def _load_config(self) -> dict[str, Any]:
         """loads config.yaml"""
         filepath = self.pathmanager.config
 
         with open(filepath, "r") as f:
             return yaml.safe_load(f)       
         
-    def _load_theme_colors(self) -> Dict[str, Any]:
+    def _load_theme_colors(self) -> dict[str, Any]:
         filepath = self.pathmanager.assets / 'themes.yaml'
 
         with open(filepath, "r") as f:
