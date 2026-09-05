@@ -133,7 +133,6 @@ class FigureManager:
         """
         Draw canvas: that is, an image of previewing matplotlib math.
         """
-
         self.canvas_plane.update_idletasks()
 
         width = self.canvas_plane.winfo_width()
@@ -175,6 +174,7 @@ class FigureManager:
         img = Image.open(buf)
 
         return ImageTk.PhotoImage(img)
+    
     def _update_canvas(self: _FigureProtocol) -> None:
         """update canvas plane with a canvas"""
         
