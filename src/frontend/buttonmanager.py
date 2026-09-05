@@ -59,7 +59,7 @@ def get_buttonstyle(latex_status : bool | None,
 
 class _ButtonProtocol(Protocol):
     """
-    Protocol that lists methods in MathVecApp, 
+    Protocol that lists methods in ``MathVecApp``
     as fallback for ButtonManagerMixin
     """
     latex_supported : bool
