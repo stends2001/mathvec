@@ -38,6 +38,8 @@ pip install -e .
 python runapp.py
 ```
 
+Alternatively, you can launch ``mathvec.bat``.
+
 Output files land in `output/` and expression history in `history/` (both created automatically, both git-ignored).
 
 ## Project Structure
