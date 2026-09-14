@@ -1,6 +1,6 @@
 # MATHVEC
 
-This little project is there to make .svgs out of math text.
+This little project is there to make .svgs out of math text. A stand-alone application is defined in this project which can be run by itself (please see **Getting started**).
 
 ## Requirements
 Python 3.10+, tkinter (usually a standard library), and a LaTeX distribution (e.g. TeX Live or MiKTeX) available on your PATH. Also note, specifically the following LaTeX packages are used:
@@ -22,6 +22,10 @@ Finally, below the button-pane, there is the history-pane (image: white). When e
 
 ## Getting started
 
+The easiest way to get this application running is by launching ``mathvec.bat``. Please make sure to adapt the file though, as it relies on the path to this project directory on the user's system, as well as the conda environment. Make sure to have the right dependencies (see ``pyproject.toml``).
+
+Alternatively, this application may be run by through a virtual environment:
+
 ```bash
 # 1. clone the repo
 git clone https://github.com/stends2001/mathvec.git
@@ -38,7 +42,6 @@ pip install -e .
 python runapp.py
 ```
 
-Alternatively, you can launch ``mathvec.bat``.
 
 Output files land in `output/` and expression history in `history/` (both created automatically, both git-ignored).
 
